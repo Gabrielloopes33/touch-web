@@ -113,7 +113,7 @@ const LinksPage = () => {
                 }}
             />
             
-            <div className="relative min-h-screen flex items-center justify-center">
+            <div className="relative min-h-screen flex items-start justify-center pt-[40vh]">
                 <div className="max-w-md w-full px-4">
                     {/* Logo e Perfil */}
                     <div className="text-center mb-8">
