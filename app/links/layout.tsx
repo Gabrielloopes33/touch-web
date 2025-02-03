@@ -1,4 +1,4 @@
-//import '../globals.css' 
+//import '../../app/globals.css'
 import { Righteous } from 'next/font/google'
 
 const MainFontFamily = Righteous({
@@ -21,10 +21,8 @@ export default function LinksLayout({
     children: React.ReactNode
 }) {
     return (
-        <div className="flex min-h-screen flex-col">
-            <main className="grow">
-                {children}
-            </main>
+        <div className={MainFontFamily.className}>
+            {children}
         </div>
     )
 } 
