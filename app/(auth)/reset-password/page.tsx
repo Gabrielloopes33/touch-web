@@ -1,3 +1,4 @@
+import React from "react";
 export const metadata = {
   title: "Reset Password - Simple",
   description: "Page description",

@@ -1,3 +1,4 @@
+import React from "react";
 //import '../../app/globals.css'
 import { Righteous } from 'next/font/google'
 

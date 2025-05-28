@@ -1,5 +1,6 @@
+import React from "react";
 import Image from "next/image";
-import Stripes from "@/public/images/stripes-dark.svg";
+
 
 export default function Cta() {
   return (
@@ -23,7 +24,7 @@ export default function Cta() {
           >
             <Image
               className="max-w-none"
-              src={Stripes}
+              src="/images/stripes.svg"
               width={768}
               height={432}
               alt="Stripes"

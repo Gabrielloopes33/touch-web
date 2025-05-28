@@ -1,4 +1,5 @@
-'use client'
+"use client";
+import React from "react";
 
 import { useState, useEffect } from 'react'
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline'

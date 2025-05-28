@@ -1,3 +1,4 @@
+import React from "react";
 import Header from "@/components/ui/header";
 import PortfolioGrid from "@/components/portfolio-grid";
 import Footer from "@/components/ui/footer";
