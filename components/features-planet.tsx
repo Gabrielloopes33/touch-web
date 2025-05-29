@@ -77,9 +77,34 @@ export default function FeaturesPlanet() {
             </div>
           </div>
           {/* Grid */}
-          <div className="grid grid-cols-1 gap-6 md:gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="
+  grid grid-cols-1 gap-10 md:gap-16 sm:grid-cols-2 lg:grid-cols-3
+  [&>*]:relative
+  [&>*:not(:nth-child(3n))]:after:content-['']
+  [&>*:not(:nth-child(3n))]:after:absolute
+  [&>*:not(:nth-child(3n))]:after:top-8
+  [&>*:not(:nth-child(3n))]:after:right-0
+  [&>*:not(:nth-child(3n))]:after:h-[calc(100%-4rem)]
+  [&>*:not(:nth-child(3n))]:after:w-px
+  [&>*:not(:nth-child(3n))]:after:bg-gradient-to-b
+  [&>*:not(:nth-child(3n))]:after:from-purple-400/0
+  [&>*:not(:nth-child(3n))]:after:via-purple-400/40
+  [&>*:not(:nth-child(3n))]:after:to-purple-400/0
+  [&>*:not(:nth-child(3n))]:after:animate-pulse
+  md:[&>*:nth-child(n+4)]:before:content-['']
+  md:[&>*:nth-child(n+4)]:before:absolute
+  md:[&>*:nth-child(n+4)]:before:left-8
+  md:[&>*:nth-child(n+4)]:before:top-0
+  md:[&>*:nth-child(n+4)]:before:w-[calc(100%-4rem)]
+  md:[&>*:nth-child(n+4)]:before:h-px
+  md:[&>*:nth-child(n+4)]:before:bg-gradient-to-r
+  md:[&>*:nth-child(n+4)]:before:from-purple-400/0
+  md:[&>*:nth-child(n+4)]:before:via-purple-400/40
+  md:[&>*:nth-child(n+4)]:before:to-purple-400/0
+  md:[&>*:nth-child(n+4)]:before:animate-pulse
+">
             <article>
-              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
+              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200 leading-normal">
                 <svg
                   className="fill-purple-500"
                   xmlns="http://www.w3.org/2000/svg"
@@ -90,13 +115,13 @@ export default function FeaturesPlanet() {
                 </svg>
                 <span>Atendimento automatizado</span>
               </h3>
-              <p className="text-[15px] text-gray-400">
+              <p className="text-[15px] text-gray-400 leading-relaxed">
               Respostas instantâneas para perguntas frequentes e qualificação de leads. Atendimento 24/7 para aumentar a satisfação do cliente e reduzir o tempo de resposta.
               </p>
             </article>
 
              <article>
-              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
+              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200 leading-normal">
                 <svg
                   className="fill-purple-500"
                   xmlns="http://www.w3.org/2000/svg"
@@ -107,13 +132,13 @@ export default function FeaturesPlanet() {
                 </svg>
                 <span>Funis de vendas inteligentes</span>
               </h3>
-              <p className="text-[15px] text-gray-400">
+              <p className="text-[15px] text-gray-400 leading-relaxed">
                Sequências de mensagens que conduzem o cliente até a compra. Automatize fluxos de conversa para aumentar a taxa de conversão e otimizar o tempo do time de vendas.
               </p>
             </article>
 
             <article>
-              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
+              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200 leading-normal">
                 <svg
                   className="fill-purple-500"
                   xmlns="http://www.w3.org/2000/svg"
@@ -124,13 +149,13 @@ export default function FeaturesPlanet() {
                 </svg>
                 <span>Integração com sistemas existentes</span>
               </h3>
-              <p className="text-[15px] text-gray-400">
+              <p className="text-[15px] text-gray-400 leading-relaxed">
                Conexão com planilhas, e-commerces ou CRMs. Automatize a entrada de dados e reduza o tempo de trabalho manual.
               </p>
             </article>
             
             <article>
-              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
+              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200 leading-normal">
                 <svg
                   className="fill-purple-500"
                   xmlns="http://www.w3.org/2000/svg"
@@ -141,12 +166,12 @@ export default function FeaturesPlanet() {
                 </svg>
                 <span>Social Media</span>
               </h3>
-              <p className="text-[15px] text-gray-400">
+              <p className="text-[15px] text-gray-400 leading-relaxed">
               Gerenciamento completo das redes sociais do seu negócio, com foco em aumentar a visibilidade da marca, atrair novos clientes e fortalecer o relacionamento com o público atual.
               </p>
             </article>
             <article>
-              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
+              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200 leading-normal">
                 <svg
                   className="fill-purple-500"
                   xmlns="http://www.w3.org/2000/svg"
@@ -157,12 +182,12 @@ export default function FeaturesPlanet() {
                 </svg>
                 <span>Tráfego Pago</span>
               </h3>
-              <p className="text-[15px] text-gray-400">
+              <p className="text-[15px] text-gray-400 leading-relaxed">
               Cuidamos de todos os anúncios pagos, que tem foco de trazer mais volume e qualificação para as redes sociais da empresa. Gerando assim uma audiência nichada pro produto.
               </p>
             </article>
             <article>
-              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
+              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200 leading-normal">
                 <svg
                   className="fill-purple-500"
                   xmlns="http://www.w3.org/2000/svg"
@@ -177,12 +202,12 @@ export default function FeaturesPlanet() {
                 </svg>
                 <span>SEO &amp; Performance</span>
               </h3>
-              <p className="text-[15px] text-gray-400">
+              <p className="text-[15px] text-gray-400 leading-relaxed">
               Coletamos insights essenciais sobre como os visitantes estão usando seus canais de comunicação com métricas detalhadas de visualização de página, likes, engajamento e conversão.
               </p>
             </article>
             <article>
-              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
+              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200 leading-normal">
                 <svg
                   className="fill-purple-500"
                   xmlns="http://www.w3.org/2000/svg"
@@ -193,12 +218,12 @@ export default function FeaturesPlanet() {
                 </svg>
                 <span>Produção de Site Profissional</span>
               </h3>
-              <p className="text-[15px] text-gray-400">
+              <p className="text-[15px] text-gray-400 leading-relaxed">
               Utilizamos as mais recentes tecnologias e práticas de desenvolvimento para criar sites que representam fielmente a identidade da sua marca e atendem às necessidades do seu público-alvo.
               </p>
             </article>
             <article>
-              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
+              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200 leading-normal">
                 <svg
                   className="fill-purple-500"
                   xmlns="http://www.w3.org/2000/svg"
@@ -209,12 +234,12 @@ export default function FeaturesPlanet() {
                 </svg>
                 <span>Captação Audiovisual</span>
               </h3>
-              <p className="text-[15px] text-gray-400">
+              <p className="text-[15px] text-gray-400 leading-relaxed">
               Captação audiovisual de alta qualidade, utilizando equipamentos de última geração para garantir imagens nítidas e sons claros.
               </p>
             </article>
             <article>
-              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
+              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200 leading-normal">
                 <svg
                   className="fill-purple-500"
                   xmlns="http://www.w3.org/2000/svg"
@@ -225,7 +250,7 @@ export default function FeaturesPlanet() {
                 </svg>
                 <span>Acompanhamento</span>
               </h3>
-              <p className="text-[15px] text-gray-400">
+              <p className="text-[15px] text-gray-400 leading-relaxed">
               Na touch você tem reuniões periódicas para apresentação de métricas, resultados e planejamentos.
               </p>
             </article>
