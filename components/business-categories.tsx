@@ -5,6 +5,14 @@ import Image from "next/image";
 export default function BusinessCategories() {
   return (
     <section>
+      <h1
+        className="mb-4 border-y text-6xl text-center font-bold [border-image:linear-gradient(to_right,transparent,theme(colors.slate.300/.8),transparent)1] md:text-5xl text-gray-700 dark:text-white py-10"
+        data-aos="zoom-y-out"
+         data-aos-delay={250}
+            >
+        Automação e Inteligência Artificial<br className="max-lg:hidden" />
+        para Negócios Digitais
+        </h1>
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="pb-12 md:pb-20">
           {/* Tab panels */}
@@ -189,8 +197,8 @@ export default function BusinessCategories() {
                       <Image
                         className="relative"
                         src="/images/logo-02.svg"
-                        width={23}
-                        height={22}
+                        width={43}
+                        height={43}
                         alt="Logo 02"
                       />
                     </div>
@@ -202,8 +210,8 @@ export default function BusinessCategories() {
                       <Image
                         className="relative"
                         src="/images/logo-03.svg"
-                        width={22}
-                        height={22}
+                        width={32}
+                        height={32}
                         alt="Logo 03"
                       />
                     </div>
@@ -215,8 +223,8 @@ export default function BusinessCategories() {
                       <Image
                         className="relative"
                         src="/images/logo-04.svg"
-                        width={24}
-                        height={22}
+                        width={34}
+                        height={32}
                         alt="Logo 04"
                       />
                     </div>
@@ -228,8 +236,8 @@ export default function BusinessCategories() {
                       <Image
                         className="relative"
                         src="/images/logo-05.svg"
-                        width={25}
-                        height={25}
+                        width={45}
+                        height={45}
                         alt="Logo 05"
                       />
                     </div>
@@ -241,8 +249,8 @@ export default function BusinessCategories() {
                       <Image
                         className="relative"
                         src="/images/logo-06.svg"
-                        width={20}
-                        height={18}
+                        width={50}
+                        height={50}
                         alt="Logo 06"
                       />
                     </div>
@@ -254,8 +262,8 @@ export default function BusinessCategories() {
                       <Image
                         className="relative"
                         src="/images/logo-07.svg"
-                        width={25}
-                        height={25}
+                        width={35}
+                        height={35}
                         alt="Logo 07"
                       />
                     </div>
@@ -267,8 +275,8 @@ export default function BusinessCategories() {
                       <Image
                         className="relative"
                         src="/images/logo-08.svg"
-                        width={20}
-                        height={20}
+                        width={30}
+                        height={30}
                         alt="Logo 08"
                       />
                     </div>
@@ -280,8 +288,8 @@ export default function BusinessCategories() {
                       <Image
                         className="relative"
                         src="/images/logo-09.svg"
-                        width={21}
-                        height={13}
+                        width={31}
+                        height={31}
                         alt="Logo 09"
                       />
                     </div>

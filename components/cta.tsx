@@ -23,7 +23,7 @@ export default function Cta() {
             aria-hidden="true"
           >
             <Image
-              className="max-w-none"
+              className="max-w-none opacity-10"
               src="/images/stripes.svg"
               width={768}
               height={432}

@@ -41,14 +41,19 @@ export default function Header() {
           </div>
 
           {/* Navigation */}
-          <nav className={`flex flex-col md:flex-row flex-1 justify-end items-center gap-6 md:gap-8 ${menuOpen ? "block" : "hidden"} md:block`}>
+          <nav
+            className={`
+              flex-col md:flex-row flex-1 justify-end items-center
+              gap-6 md:gap-5
+              ${menuOpen ? "flex" : "hidden"}
+              md:flex
+              absolute md:static top-16 left-0 w-full md:w-auto bg-white md:bg-transparent rounded-b-2xl shadow-lg md:shadow-none z-20
+              py-6 md:py-0
+              transition-all
+            `}
+          >
             <ThemeToggle />
-            <Link
-              href="/Sobre"
-              className="btn-sm bg-white text-gray-800 shadow hover:bg-gray-50 whitespace-nowrap text-sm gap-6 md:gap-8"
-            >
-              Sobre
-            </Link>
+            
             <Link
               href="/Port"
               className="btn-sm bg-white text-gray-800 shadow hover:bg-gray-50 whitespace-nowrap text-sm"

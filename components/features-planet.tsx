@@ -35,7 +35,7 @@ export default function FeaturesPlanet() {
                     src="/images/planet.svg"
                     width={789}
                     height={755}
-                    alt="Planet decoration"
+                    alt=""
                   />
                   <div>
                     <Image
@@ -73,6 +73,57 @@ export default function FeaturesPlanet() {
           </div>
           {/* Grid */}
           <div className="grid overflow-hidden sm:grid-cols-2 lg:grid-cols-3 [&>*]:relative [&>*]:p-6 [&>*]:before:absolute [&>*]:before:bg-gray-800 [&>*]:before:[block-size:100vh] [&>*]:before:[inline-size:1px] [&>*]:before:[inset-block-start:0] [&>*]:before:[inset-inline-start:-1px] [&>*]:after:absolute [&>*]:after:bg-gray-800 [&>*]:after:[block-size:1px] [&>*]:after:[inline-size:100vw] [&>*]:after:[inset-block-start:-1px] [&>*]:after:[inset-inline-start:0] md:[&>*]:p-10">
+            <article>
+              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
+                <svg
+                  className="fill-purple-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={16}
+                  height={16}
+                >
+                  <path d="M9 1a1 1 0 1 0-2 0v6a1 1 0 0 0 2 0V1ZM4.572 3.08a1 1 0 0 0-1.144-1.64A7.987 7.987 0 0 0 0 8a8 8 0 0 0 16 0c0-2.72-1.36-5.117-3.428-6.56a1 1 0 1 0-1.144 1.64A5.987 5.987 0 0 1 14 8 6 6 0 1 1 2 8a5.987 5.987 0 0 1 2.572-4.92Z" />
+                </svg>
+                <span>Atendimento automatizado</span>
+              </h3>
+              <p className="text-[15px] text-gray-400">
+              Respostas instantâneas para perguntas frequentes e qualificação de leads. Atendimento 24/7 para aumentar a satisfação do cliente e reduzir o tempo de resposta.
+              </p>
+            </article>
+
+             <article>
+              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
+                <svg
+                  className="fill-purple-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={16}
+                  height={16}
+                >
+                  <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-2a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm1.715-6.752a1 1 0 0 1 .57-1.916 8.014 8.014 0 0 1 5.383 5.383 1 1 0 1 1-1.916.57 6.014 6.014 0 0 0-4.037-4.037Zm4.037 7.467a1 1 0 1 1 1.916.57 8.014 8.014 0 0 1-5.383 5.383 1 1 0 1 1-.57-1.916 6.014 6.014 0 0 0 4.037-4.037Zm-7.467 4.037a1 1 0 1 1-.57 1.916 8.014 8.014 0 0 1-5.383-5.383 1 1 0 1 1 1.916-.57 6.014 6.014 0 0 0 4.037 4.037Z" />
+                </svg>
+                <span>Funis de vendas inteligentes</span>
+              </h3>
+              <p className="text-[15px] text-gray-400">
+               Sequências de mensagens que conduzem o cliente até a compra. Automatize fluxos de conversa para aumentar a taxa de conversão e otimizar o tempo do time de vendas.
+              </p>
+            </article>
+
+            <article>
+              <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
+                <svg
+                  className="fill-purple-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={16}
+                  height={16}
+                >
+                  <path d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm2-4a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V4a4 4 0 0 0-4-4H4Zm1 10a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H5Z" />
+                </svg>
+                <span>Integração com sistemas existentes</span>
+              </h3>
+              <p className="text-[15px] text-gray-400">
+               Conexão com planilhas, e-commerces ou CRMs. Automatize a entrada de dados e reduza o tempo de trabalho manual.
+              </p>
+            </article>
+            
             <article>
               <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
                 <svg
