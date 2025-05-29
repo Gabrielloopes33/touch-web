@@ -6,7 +6,7 @@ export default function BusinessCategories() {
   return (
     <section>
       <h1
-        className="mb-4 border-y text-6xl text-center font-bold [border-image:linear-gradient(to_right,transparent,theme(colors.slate.300/.8),transparent)1] md:text-5xl text-gray-700 dark:text-white py-10"
+        className="mb-4 border-y text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center font-bold [border-image:linear-gradient(to_right,transparent,theme(colors.slate.300/.8),transparent)1] text-gray-700 dark:text-white py-10"
         data-aos="zoom-y-out"
          data-aos-delay={250}
             >
@@ -16,7 +16,14 @@ export default function BusinessCategories() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="pb-12 md:pb-20">
           {/* Tab panels */}
-          <div className="relative flex h-[324px] items-center justify-center">
+          <div
+            className="
+              relative flex h-[324px] items-center justify-center
+              max-w-full
+              sm:h-[324px]
+              h-[200px]   // altura menor no mobile
+            "
+          >
             {/* Small blue dots */}
             <div className="absolute -z-10">
               <svg
@@ -175,128 +182,133 @@ export default function BusinessCategories() {
             <div className="absolute inset-y-0 left-1/2 -z-10 w-px -translate-x-[216px] bg-gradient-to-b from-gray-200 to-transparent mix-blend-multiply"></div>
             <div className="absolute inset-y-0 left-1/2 -z-10 w-px translate-x-[216px] bg-gradient-to-t from-gray-200 to-transparent mix-blend-multiply"></div>
             {/* Logos */}
-            <div className="absolute before:absolute before:-inset-3 before:animate-[spin_3s_linear_infinite] before:rounded-full before:border before:border-transparent before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)] before:[background:conic-gradient(from_180deg,transparent,theme(colors.blue.500))_border-box]">
-              <div className="animate-[breath_8s_ease-in-out_infinite_both]">
-                <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
-                  <Image
-                    className="relative"
-                    src="/images/logo-01.svg"
-                    width={40}
-                    height={32}
-                    alt="Logo 01"
-                  />
-                </div>
-              </div>
-            </div>
+            <div
+      className="absolute before:absolute before:-inset-3 before:animate-[spin_3s_linear_infinite] before:rounded-full before:border before:border-transparent before:[mask-composite:exclude_!important] before:[mask:linear-gradient(white_0_0)_padding-box,_linear-gradient(white_0_0)] before:[background:conic-gradient(from_180deg,transparent,theme(colors.blue.500))_border-box]
+        w-24 h-24 sm:w-24 sm:h-24 w-16 h-16
+      "
+    >
+      <div className="animate-[breath_8s_ease-in-out_infinite_both]">
+        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
+          <Image
+            className="relative"
+            src="/images/logo-01.svg"
+            width={40}
+            height={32}
+            alt="Logo 01"
+          />
+        </div>
+      </div>
+    </div>
 
-            <div className="relative flex flex-col">
-              <article className="flex h-full w-full items-center justify-center focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300">
-                <div className="absolute -translate-x-[136px]">
-                  <div className="animate-[breath_7s_ease-in-out_3s_infinite_both]">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
-                      <Image
-                        className="relative"
-                        src="/images/logo-02.svg"
-                        width={43}
-                        height={43}
-                        alt="Logo 02"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute translate-x-[136px]">
-                  <div className="animate-[breath_7s_ease-in-out_3.5s_infinite_both]">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
-                      <Image
-                        className="relative"
-                        src="/images/logo-03.svg"
-                        width={32}
-                        height={32}
-                        alt="Logo 03"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute -translate-x-[216px] -translate-y-[82px]">
-                  <div className="animate-[breath_6s_ease-in-out_3.5s_infinite_both]">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
-                      <Image
-                        className="relative"
-                        src="/images/logo-04.svg"
-                        width={34}
-                        height={32}
-                        alt="Logo 04"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute -translate-y-[82px] translate-x-[216px]">
-                  <div className="animate-[breath_6s_ease-in-out_1.5s_infinite_both]">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
-                      <Image
-                        className="relative"
-                        src="/images/logo-05.svg"
-                        width={45}
-                        height={45}
-                        alt="Logo 05"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute translate-x-[216px] translate-y-[82px]">
-                  <div className="animate-[breath_6s_ease-in-out_2s_infinite_both]">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
-                      <Image
-                        className="relative"
-                        src="/images/logo-06.svg"
-                        width={50}
-                        height={50}
-                        alt="Logo 06"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute -translate-x-[216px] translate-y-[82px]">
-                  <div className="animate-[breath_6s_ease-in-out_2.5s_infinite_both]">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
-                      <Image
-                        className="relative"
-                        src="/images/logo-07.svg"
-                        width={35}
-                        height={35}
-                        alt="Logo 07"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute -translate-x-[292px] opacity-40">
-                  <div className="animate-[breath_6s_ease-in-out_2s_infinite_both]">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200/60 bg-white shadow-lg">
-                      <Image
-                        className="relative"
-                        src="/images/logo-08.svg"
-                        width={30}
-                        height={30}
-                        alt="Logo 08"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute translate-x-[292px] opacity-40">
-                  <div className="animate-[breath_6s_ease-in-out_4s_infinite_both]">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200/60 bg-white shadow-lg">
-                      <Image
-                        className="relative"
-                        src="/images/logo-09.svg"
-                        width={31}
-                        height={31}
-                        alt="Logo 09"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </article>
+    <div className="relative flex flex-col">
+      <article className="flex h-full w-full items-center justify-center focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300">
+        {/* Exemplo de ajuste dos deslocamentos dos logos */}
+        <div className="absolute -translate-x-[80px] sm:-translate-x-[136px]">
+          <div className="animate-[breath_7s_ease-in-out_3s_infinite_both]">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
+              <Image
+                className="relative"
+                src="/images/logo-02.svg"
+                width={43}
+                height={43}
+                alt="Logo 02"
+              />
             </div>
+          </div>
+        </div>
+        <div className="absolute translate-x-[80px] sm:translate-x-[136px]">
+          <div className="animate-[breath_7s_ease-in-out_3.5s_infinite_both]">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
+              <Image
+                className="relative"
+                src="/images/logo-03.svg"
+                width={32}
+                height={32}
+                alt="Logo 03"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="absolute -translate-x-[120px] -translate-y-[48px] sm:-translate-x-[216px] sm:-translate-y-[82px]">
+          <div className="animate-[breath_6s_ease-in-out_3.5s_infinite_both]">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
+              <Image
+                className="relative"
+                src="/images/logo-04.svg"
+                width={34}
+                height={32}
+                alt="Logo 04"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="absolute -translate-y-[48px] translate-x-[120px] sm:translate-x-[216px] sm:-translate-y-[82px]">
+          <div className="animate-[breath_6s_ease-in-out_1.5s_infinite_both]">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
+              <Image
+                className="relative"
+                src="/images/logo-05.svg"
+                width={45}
+                height={45}
+                alt="Logo 05"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="absolute translate-x-[120px] translate-y-[48px] sm:translate-x-[216px] sm:translate-y-[82px]">
+          <div className="animate-[breath_6s_ease-in-out_2s_infinite_both]">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
+              <Image
+                className="relative"
+                src="/images/logo-06.svg"
+                width={50}
+                height={50}
+                alt="Logo 06"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="absolute -translate-x-[120px] translate-y-[48px] sm:-translate-x-[216px] sm:translate-y-[82px]">
+          <div className="animate-[breath_6s_ease-in-out_2.5s_infinite_both]">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-lg shadow-black/[0.03] before:absolute before:inset-0 before:m-[8.334%] before:rounded-[inherit] before:border before:border-gray-700/5 before:bg-gray-200/60 before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
+              <Image
+                className="relative"
+                src="/images/logo-07.svg"
+                width={35}
+                height={35}
+                alt="Logo 07"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="absolute -translate-x-[292px] opacity-40">
+          <div className="animate-[breath_6s_ease-in-out_2s_infinite_both]">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200/60 bg-white shadow-lg">
+              <Image
+                className="relative"
+                src="/images/logo-08.svg"
+                width={30}
+                height={30}
+                alt="Logo 08"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="absolute translate-x-[292px] opacity-40">
+          <div className="animate-[breath_6s_ease-in-out_4s_infinite_both]">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200/60 bg-white shadow-lg">
+              <Image
+                className="relative"
+                src="/images/logo-09.svg"
+                width={31}
+                height={31}
+                alt="Logo 09"
+              />
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
           </div>
         </div>
       </div>

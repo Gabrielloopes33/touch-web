@@ -9,7 +9,7 @@ import Image from "next/image";
 
 export default function FeaturesPlanet() {
   return (
-    <section className="relative before:absolute before:inset-0 before:-z-20 before:bg-purple-900">
+    <section className="relative before:absolute before:inset-0 before:-z-20 before:bg-purple-900 border-none outline-none overflow-visible">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="py-12 md:py-20">
           {/* Section header */}
@@ -21,9 +21,14 @@ export default function FeaturesPlanet() {
           {/* Planet */}
           <div className="pb-16 md:pb-20" data-aos="zoom-y-out">
             <div className="text-center">
-              <div className="relative inline-flex rounded-full before:absolute before:inset-0 before:-z-10 before:scale-[.85] before:animate-[pulse_4s_cubic-bezier(.4,0,.6,1)_infinite] before:bg-gradient-to-b before:from-GRAY-900 before:to-sky-700/50 before:purple-3xl after:absolute after:inset-0 after:rounded-[inherit] after:[background:radial-gradient(closest-side,theme(colors.purple.500),transparent)]">
+              <div className="
+      relative inline-flex rounded-full
+      w-60 h-60 sm:w-80 sm:h-80 md:w-[400px] md:h-[400px]
+      before:absolute before:inset-0 before:-z-10 before:scale-[.85] before:animate-[pulse_4s_cubic-bezier(.4,0,.6,1)_infinite] before:bg-gradient-to-b before:from-GRAY-900 before:to-sky-700/50 before:purple-3xl
+      after:absolute after:inset-0 after:rounded-[inherit] after:[background:radial-gradient(closest-side,theme(colors.purple.500),transparent)]
+    ">
                 <Image
-                  className="rounded-full bg-gray-900"
+                  className="rounded-full bg-gray-900 w-full h-full"
                   src="/images/planet.png"
                   width={400}
                   height={400}
@@ -35,7 +40,7 @@ export default function FeaturesPlanet() {
                     src="/images/planet.svg"
                     width={789}
                     height={755}
-                    alt=""
+                    alt="Planet decoration"
                   />
                   <div>
                     <Image
@@ -72,7 +77,7 @@ export default function FeaturesPlanet() {
             </div>
           </div>
           {/* Grid */}
-          <div className="grid overflow-hidden sm:grid-cols-2 lg:grid-cols-3 [&>*]:relative [&>*]:p-6 [&>*]:before:absolute [&>*]:before:bg-gray-800 [&>*]:before:[block-size:100vh] [&>*]:before:[inline-size:1px] [&>*]:before:[inset-block-start:0] [&>*]:before:[inset-inline-start:-1px] [&>*]:after:absolute [&>*]:after:bg-gray-800 [&>*]:after:[block-size:1px] [&>*]:after:[inline-size:100vw] [&>*]:after:[inset-block-start:-1px] [&>*]:after:[inset-inline-start:0] md:[&>*]:p-10">
+          <div className="grid grid-cols-1 gap-6 md:gap-10 sm:grid-cols-2 lg:grid-cols-3">
             <article>
               <h3 className="mb-2 flex items-center space-x-2 font-medium text-gray-200">
                 <svg
@@ -81,7 +86,7 @@ export default function FeaturesPlanet() {
                   width={16}
                   height={16}
                 >
-                  <path d="M9 1a1 1 0 1 0-2 0v6a1 1 0 0 0 2 0V1ZM4.572 3.08a1 1 0 0 0-1.144-1.64A7.987 7.987 0 0 0 0 8a8 8 0 0 0 16 0c0-2.72-1.36-5.117-3.428-6.56a1 1 0 1 0-1.144 1.64A5.987 5.987 0 0 1 14 8 6 6 0 1 1 2 8a5.987 5.987 0 0 1 2.572-4.92Z" />
+                  <path d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm2-4a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V4a4 4 0 0 0-4-4H4Zm1 10a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H5Z" />
                 </svg>
                 <span>Atendimento automatizado</span>
               </h3>
@@ -115,7 +120,7 @@ export default function FeaturesPlanet() {
                   width={16}
                   height={16}
                 >
-                  <path d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm2-4a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V4a4 4 0 0 0-4-4H4Zm1 10a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2H5Z" />
+                  <path d="M8 0a1 1 0 0 1 1 1v14a1 1 0 1 1-2 0V1a1 1 0 0 1 1-1Zm6 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h1a1 1 0 1 1 0 2h-1a3 3 0 0 1-3-3V4a3 3 0 0 1 3-3h1a1 1 0 1 1 0 2h-1ZM1 1a1 1 0 0 0 0 2h1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 1 0 0 2h1a3 3 0 0 0 3-3V4a3 3 0 0 0-3-3H1Z" />
                 </svg>
                 <span>Integração com sistemas existentes</span>
               </h3>
