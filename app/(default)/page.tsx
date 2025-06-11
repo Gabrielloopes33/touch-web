@@ -1,7 +1,9 @@
 import React from "react";
+import ChatwootWidget from "@/components/ChatwootWidget";
+
 export const metadata = {
   title: "Agência Touch",
-  description: "Page description",
+  description: "Sua marca precisa ser vista. Nós mostramos com imagem, som e resultado.",
 };
 
 import Hero from "@/components/hero-home";
@@ -15,13 +17,12 @@ import Banner from "@/components/banner";
 export default function Home() {
   return (
     <>
+      <ChatwootWidget />
       <Hero />
       <BusinessCategories />
       <FeaturesPlanet />
-
       <LargeTestimonial />
       <Cta />
-
     </>
   );
 }
