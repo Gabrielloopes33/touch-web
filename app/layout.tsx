@@ -11,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Seu Título",
-  description: "Sua Descrição",
+  title: "Agência Touch",
+  description: "Sua marca precisa ser vista. Nós mostramos com imagem, som e resultado.",
   icons: {
     icon: '/images/pontot.png',
     apple: '/images/pontot.png',
