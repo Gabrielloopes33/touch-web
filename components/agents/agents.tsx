@@ -60,11 +60,11 @@ export default function Agents() {
   }
 
   return (
-    <div className="flex flex-col h-full max-h-[80vh] w-full mx-auto bg-base-100 rounded-xl shadow p-4">
+    <div className="flex flex-col h-full max-h-[80vh] w-full mx-auto bg-base-100 rounded-xl shadow p-4 md:p-6 md:max-w-3xl min-w-0">
       {/* Título e botões de agentes centralizados */}
       <div className="flex flex-col items-center mb-6">
         <span className="text-2xl font-bold mb-4">Agentes</span>
-        <div className="flex gap-4 justify-center">
+        <div className="flex flex-wrap gap-2 md:gap-4 justify-center w-full">
           <button
             className={`btn btn-block btn-lg rounded-xl shadow-md transition-all duration-200 font-semibold text-base border-2 border-primary bg-white hover:bg-black hover:text-white btn-outline btn-primary${selectedAgent === 'produtor-conteudo' ? ' !bg-black !text-white !border-black' : ''}`}
             onClick={() => setSelectedAgent('produtor-conteudo')}
@@ -95,7 +95,7 @@ export default function Agents() {
           </button>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto mb-4 pr-2">
+      <div className="flex-1 overflow-y-auto mb-4 pr-0 md:pr-2 min-w-0">
         {messages.length === 0 && (
           <div className="text-center text-base-content/60 mt-10">Converse com seu agente.</div>
         )}
@@ -105,7 +105,7 @@ export default function Agents() {
             className={`flex w-full mb-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-[70%] px-4 py-2 rounded-2xl shadow text-base whitespace-pre-line ${
+              className={`max-w-[90vw] md:max-w-[70%] px-3 py-2 md:px-4 md:py-2 rounded-2xl shadow text-base whitespace-pre-line break-words ${
                 msg.role === "user"
                   ? "bg-primary text-black rounded-br-sm ml-auto"
                   : "bg-base-200 text-base-content rounded-bl-sm mr-auto"
@@ -117,15 +117,15 @@ export default function Agents() {
         ))}
         <div ref={messagesEndRef} />
       </div>
-      <form onSubmit={handleSend} className="flex gap-2">
+      <form onSubmit={handleSend} className="flex gap-2 flex-col sm:flex-row w-full">
         <input
-          className="rounded-xl shadow-md input input-bordered flex-1"
-          placeholder="Fala comigo mai frend"
+          className="rounded-xl shadow-md input input-bordered flex-1 min-w-0"
+          placeholder="Digite sua mensagem..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           disabled={loading}
         />
-        <button className="btn btn-block btn-lg rounded-xl shadow-md transition-all duration-200 font-semibold text-base justify-start btn-outline btn-primary bg-white hover:bg-black hover:text-white border-2 border-primary" type="submit" disabled={!input.trim() || loading}>
+        <button className="btn btn-primary w-full sm:w-auto" type="submit" disabled={!input.trim() || loading}>
           {loading ? 'Enviando...' : 'Enviar'}
         </button>
       </form>
