@@ -120,12 +120,12 @@ export default function Agents() {
       <form onSubmit={handleSend} className="flex gap-2">
         <input
           className="rounded-xl shadow-md input input-bordered flex-1"
-          placeholder="Digite sua mensagem..."
+          placeholder="Fala comigo mai frend"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           disabled={loading}
         />
-        <button className="btn btn-primary" type="submit" disabled={!input.trim() || loading}>
+        <button className="btn btn-block btn-lg rounded-xl shadow-md transition-all duration-200 font-semibold text-base justify-start btn-outline btn-primary bg-white hover:bg-black hover:text-white border-2 border-primary" type="submit" disabled={!input.trim() || loading}>
           {loading ? 'Enviando...' : 'Enviar'}
         </button>
       </form>
