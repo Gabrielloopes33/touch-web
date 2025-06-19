@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { HamsterLoader } from "./HamsterLoader";
 
 interface Message {
   role: "user" | "assistant";
@@ -26,36 +27,25 @@ export default function Agents() {
       { role: "user", content: input }
     ]);
     setInput("");
-
-    if (selectedAgent === "produtor-site") {
-      setLoading(true);
-      try {
-        const res = await fetch("/api/agents", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: [...messages, { role: "user", content: input }], agent: selectedAgent })
-        });
-        const data = await res.json();
-        setMessages((msgs) => [
-          ...msgs,
-          { role: "assistant", content: data.reply || "[Erro ao obter resposta da IA]" }
-        ]);
-      } catch (err) {
-        setMessages((msgs) => [
-          ...msgs,
-          { role: "assistant", content: "[Erro ao conectar com a IA]" }
-        ]);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      // Simulação para outros agentes
-      setTimeout(() => {
-        setMessages((msgs) => [
-          ...msgs,
-          { role: "assistant", content: "Esta é uma resposta simulada do agente." }
-        ]);
-      }, 800);
+    setLoading(true);
+    try {
+      const res = await fetch("/api/agents", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: [...messages, { role: "user", content: input }], agent: selectedAgent })
+      });
+      const data = await res.json();
+      setMessages((msgs) => [
+        ...msgs,
+        { role: "assistant", content: data.reply || "[Erro ao obter resposta da IA]" }
+      ]);
+    } catch (err) {
+      setMessages((msgs) => [
+        ...msgs,
+        { role: "assistant", content: "[Erro ao conectar com a IA]" }
+      ]);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -93,6 +83,20 @@ export default function Agents() {
           >
             Arquiteto
           </button>
+          <button
+            className={`btn btn-block btn-lg rounded-xl shadow-md transition-all duration-200 font-semibold text-base border-2 border-primary bg-white hover:bg-black hover:text-white btn-outline btn-primary${selectedAgent === 'orcamentos' ? ' !bg-black !text-white !border-black' : ''}`}
+            onClick={() => setSelectedAgent('orcamentos')}
+            type="button"
+          >
+            Orçamentos
+          </button>
+          <button
+            className={`btn btn-block btn-lg rounded-xl shadow-md transition-all duration-200 font-semibold text-base border-2 border-primary bg-white hover:bg-black hover:text-white btn-outline btn-primary${selectedAgent === 'planejamento-obra' ? ' !bg-black !text-white !border-black' : ''}`}
+            onClick={() => setSelectedAgent('planejamento-obra')}
+            type="button"
+          >
+            Planejamento de Obra
+          </button>
         </div>
       </div>
       <div className="flex-1 overflow-y-auto mb-4 pr-0 md:pr-2 min-w-0">
@@ -115,17 +119,18 @@ export default function Agents() {
             </div>
           </div>
         ))}
+        {loading && <HamsterLoader />}
         <div ref={messagesEndRef} />
       </div>
       <form onSubmit={handleSend} className="flex gap-2 flex-col sm:flex-row w-full">
         <input
           className="rounded-xl shadow-md input input-bordered flex-1 min-w-0"
-          placeholder="Digite sua mensagem..."
+          placeholder="Fala comigo mai frend"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           disabled={loading}
         />
-        <button className="btn btn-primary w-full sm:w-auto" type="submit" disabled={!input.trim() || loading}>
+        <button className="btn-primary text-black' : 'btn-outline btn-primary bg-white hover:bg-black hover:text-white border-2 border-primary btn btn-primary w-full sm:w-auto" type="submit" disabled={!input.trim() || loading}>
           {loading ? 'Enviando...' : 'Enviar'}
         </button>
       </form>
