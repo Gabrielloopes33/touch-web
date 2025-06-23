@@ -1,5 +1,11 @@
 // app/api/agents/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_ANON_KEY!
+);
 
 /* ----------------------------------------------------------------– GET */
 export async function GET() {
@@ -72,6 +78,12 @@ export async function POST(req: NextRequest) {
       });
       const dataCompiled = await openaiResCompiled.json();
       const reply = dataCompiled.choices?.[0]?.message?.content || "Erro ao compilar as respostas dos agentes.";
+      await supabase.from('conversas').insert([
+        {
+          agent,      // nome do agente (ex: 'engenheiro')
+          messages    // array de mensagens do chat
+        }
+      ]);
       return NextResponse.json({ reply }, { status: 200 });
     }
 
@@ -94,6 +106,12 @@ export async function POST(req: NextRequest) {
       });
       const data = await openaiRes.json();
       const reply = data.choices?.[0]?.message?.content || "Erro na resposta do Produtor de Conteúdo.";
+      await supabase.from('conversas').insert([
+        {
+          agent,      // nome do agente (ex: 'engenheiro')
+          messages    // array de mensagens do chat
+        }
+      ]);
       return NextResponse.json({ reply }, { status: 200 });
     }
 
@@ -115,6 +133,12 @@ export async function POST(req: NextRequest) {
       });
       const data = await openaiRes.json();
       const reply = data.choices?.[0]?.message?.content || "Erro na resposta do Engenheiro.";
+      await supabase.from('conversas').insert([
+        {
+          agent,      // nome do agente (ex: 'engenheiro')
+          messages    // array de mensagens do chat
+        }
+      ]);
       return NextResponse.json({ reply }, { status: 200 });
     }
 
@@ -136,6 +160,12 @@ export async function POST(req: NextRequest) {
       });
       const data = await openaiRes.json();
       const reply = data.choices?.[0]?.message?.content || "Erro na resposta do Arquiteto.";
+      await supabase.from('conversas').insert([
+        {
+          agent,      // nome do agente (ex: 'engenheiro')
+          messages    // array de mensagens do chat
+        }
+      ]);
       return NextResponse.json({ reply }, { status: 200 });
     }
 
@@ -157,6 +187,12 @@ export async function POST(req: NextRequest) {
       });
       const data = await openaiRes.json();
       const reply = data.choices?.[0]?.message?.content || "Erro na resposta do Orçamentos.";
+      await supabase.from('conversas').insert([
+        {
+          agent,      // nome do agente (ex: 'engenheiro')
+          messages    // array de mensagens do chat
+        }
+      ]);
       return NextResponse.json({ reply }, { status: 200 });
     }
 
@@ -178,6 +214,12 @@ export async function POST(req: NextRequest) {
       });
       const data = await openaiRes.json();
       const reply = data.choices?.[0]?.message?.content || "Erro na resposta do Planejamento de Obra.";
+      await supabase.from('conversas').insert([
+        {
+          agent,      // nome do agente (ex: 'engenheiro')
+          messages    // array de mensagens do chat
+        }
+      ]);
       return NextResponse.json({ reply }, { status: 200 });
     }
 

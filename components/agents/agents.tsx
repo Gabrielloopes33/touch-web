@@ -8,12 +8,23 @@ interface Message {
   content: string;
 }
 
+const AGENTS = [
+  "produtor-conteudo",
+  "produtor-site",
+  "engenheiro",
+  "arquiteto",
+  "orcamentos",
+  "planejamento-obra"
+];
+
 export default function Agents() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messagesByAgent, setMessagesByAgent] = useState<Record<string, Message[]>>({});
   const [input, setInput] = useState("");
   const [selectedAgent, setSelectedAgent] = useState<string>("produtor-site");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const messages: Message[] = messagesByAgent[selectedAgent] || [];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -22,31 +33,40 @@ export default function Agents() {
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
     if (!input.trim()) return;
-    setMessages((msgs) => [
-      ...msgs,
-      { role: "user", content: input }
-    ]);
+    const newMessages: Message[] = [...messages, { role: "user", content: input }];
+    setMessagesByAgent((prev) => ({ ...prev, [selectedAgent]: newMessages }));
     setInput("");
     setLoading(true);
     try {
       const res = await fetch("/api/agents", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: [...messages, { role: "user", content: input }], agent: selectedAgent })
+        body: JSON.stringify({ messages: newMessages, agent: selectedAgent })
       });
       const data = await res.json();
-      setMessages((msgs) => [
-        ...msgs,
-        { role: "assistant", content: data.reply || "[Erro ao obter resposta da IA]" }
-      ]);
+      setMessagesByAgent((prev) => ({
+        ...prev,
+        [selectedAgent]: [
+          ...newMessages,
+          { role: "assistant", content: data.reply || "[Erro ao obter resposta da IA]" }
+        ]
+      }));
     } catch (err) {
-      setMessages((msgs) => [
-        ...msgs,
-        { role: "assistant", content: "[Erro ao conectar com a IA]" }
-      ]);
+      setMessagesByAgent((prev) => ({
+        ...prev,
+        [selectedAgent]: [
+          ...newMessages,
+          { role: "assistant", content: "[Erro ao conectar com a IA]" }
+        ]
+      }));
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleAgentChange(agent: string) {
+    setSelectedAgent(agent);
+    setInput("");
   }
 
   return (
@@ -55,48 +75,21 @@ export default function Agents() {
       <div className="flex flex-col items-center mb-6">
         <span className="text-2xl font-bold mb-4">Agentes</span>
         <div className="flex flex-wrap gap-2 md:gap-4 justify-center w-full">
-          <button
-            className={`btn btn-block btn-lg rounded-xl shadow-md transition-all duration-200 font-semibold text-base border-2 border-primary bg-white hover:bg-black hover:text-white btn-outline btn-primary${selectedAgent === 'produtor-conteudo' ? ' !bg-black !text-white !border-black' : ''}`}
-            onClick={() => setSelectedAgent('produtor-conteudo')}
-            type="button"
-          >
-            Produtor de conteúdo
-          </button>
-          <button
-            className={`btn btn-block btn-lg rounded-xl shadow-md transition-all duration-200 font-semibold text-base border-2 border-primary bg-white hover:bg-black hover:text-white btn-outline btn-primary${selectedAgent === 'produtor-site' ? ' !bg-black !text-white !border-black' : ''}`}
-            onClick={() => setSelectedAgent('produtor-site')}
-            type="button"
-          >
-            Produtor de site
-          </button>
-          <button
-            className={`btn btn-block btn-lg rounded-xl shadow-md transition-all duration-200 font-semibold text-base border-2 border-primary bg-white hover:bg-black hover:text-white btn-outline btn-primary${selectedAgent === 'engenheiro' ? ' !bg-black !text-white !border-black' : ''}`}
-            onClick={() => setSelectedAgent('engenheiro')}
-            type="button"
-          >
-            Engenheiro
-          </button>
-          <button
-            className={`btn btn-block btn-lg rounded-xl shadow-md transition-all duration-200 font-semibold text-base border-2 border-primary bg-white hover:bg-black hover:text-white btn-outline btn-primary${selectedAgent === 'arquiteto' ? ' !bg-black !text-white !border-black' : ''}`}
-            onClick={() => setSelectedAgent('arquiteto')}
-            type="button"
-          >
-            Arquiteto
-          </button>
-          <button
-            className={`btn btn-block btn-lg rounded-xl shadow-md transition-all duration-200 font-semibold text-base border-2 border-primary bg-white hover:bg-black hover:text-white btn-outline btn-primary${selectedAgent === 'orcamentos' ? ' !bg-black !text-white !border-black' : ''}`}
-            onClick={() => setSelectedAgent('orcamentos')}
-            type="button"
-          >
-            Orçamentos
-          </button>
-          <button
-            className={`btn btn-block btn-lg rounded-xl shadow-md transition-all duration-200 font-semibold text-base border-2 border-primary bg-white hover:bg-black hover:text-white btn-outline btn-primary${selectedAgent === 'planejamento-obra' ? ' !bg-black !text-white !border-black' : ''}`}
-            onClick={() => setSelectedAgent('planejamento-obra')}
-            type="button"
-          >
-            Planejamento de Obra
-          </button>
+          {AGENTS.map((agent) => (
+            <button
+              key={agent}
+              className={`btn btn-block btn-lg rounded-xl shadow-md transition-all duration-200 font-semibold text-base border-2 border-primary bg-white hover:bg-black hover:text-white btn-outline btn-primary${selectedAgent === agent ? ' !bg-black !text-white !border-black' : ''}`}
+              onClick={() => handleAgentChange(agent)}
+              type="button"
+            >
+              {agent === 'produtor-conteudo' && 'Produtor de conteúdo'}
+              {agent === 'produtor-site' && 'Produtor de site'}
+              {agent === 'engenheiro' && 'Engenheiro'}
+              {agent === 'arquiteto' && 'Arquiteto'}
+              {agent === 'orcamentos' && 'Orçamentos'}
+              {agent === 'planejamento-obra' && 'Planejamento de Obra'}
+            </button>
+          ))}
         </div>
       </div>
       <div className="flex-1 overflow-y-auto mb-4 pr-0 md:pr-2 min-w-0">
