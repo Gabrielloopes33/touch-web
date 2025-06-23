@@ -105,7 +105,7 @@ export default function Agents() {
       </div>
       <div className="flex-1 overflow-y-auto mb-4 pr-0 md:pr-2 min-w-0">
         {messages.length === 0 && (
-          <div className="text-center text-base-content/60 mt-10">Converse com seu agente.</div>
+          <div className="text-center text-base-content/60 mt-15">Converse com seu agente.</div>
         )}
         {messages.map((msg, i) => (
           <div
