@@ -64,9 +64,20 @@ export default function Agents() {
     }
   }
 
-  function handleAgentChange(agent: string) {
+  // Busca histórico do agente no Supabase ao trocar de agente
+  async function handleAgentChange(agent: string) {
     setSelectedAgent(agent);
     setInput("");
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/agents?agent=${agent}`);
+      const data = await res.json();
+      setMessagesByAgent((prev) => ({ ...prev, [agent]: data.messages || [] }));
+    } catch (err) {
+      setMessagesByAgent((prev) => ({ ...prev, [agent]: [] }));
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

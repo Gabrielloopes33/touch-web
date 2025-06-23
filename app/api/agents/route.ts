@@ -8,7 +8,23 @@ const supabase = createClient(
 );
 
 /* ----------------------------------------------------------------– GET */
-export async function GET() {
+export async function GET(req: NextRequest) {
+  // Permite buscar histórico de um agente: /api/agents?agent=engenheiro
+  const { searchParams } = new URL(req.url!);
+  const agent = searchParams.get('agent');
+  if (agent) {
+    // Busca o último histórico desse agente
+    const { data, error } = await supabase
+      .from('conversas')
+      .select('messages')
+      .eq('agent', agent)
+      .order('created_at', { ascending: false })
+      .limit(1);
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ messages: data?.[0]?.messages || [] }, { status: 200 });
+  }
   return NextResponse.json({ reply: 'API de agentes ativa.' }, { status: 200 });
 }
 
