@@ -94,10 +94,11 @@ export async function POST(req: NextRequest) {
       });
       const dataCompiled = await openaiResCompiled.json();
       const reply = dataCompiled.choices?.[0]?.message?.content || "Erro ao compilar as respostas dos agentes.";
+      const newMessages = [...messages, { role: "assistant", content: reply }];
       await supabase.from('conversas').insert([
         {
-          agent,      // nome do agente (ex: 'engenheiro')
-          messages    // array de mensagens do chat
+          agent,
+          messages: newMessages
         }
       ]);
       return NextResponse.json({ reply }, { status: 200 });
@@ -122,15 +123,15 @@ export async function POST(req: NextRequest) {
       });
       const data = await openaiRes.json();
       const reply = data.choices?.[0]?.message?.content || "Erro na resposta do Produtor de Conteúdo.";
+      const newMessages = [...messages, { role: "assistant", content: reply }];
       await supabase.from('conversas').insert([
         {
-          agent,      // nome do agente (ex: 'engenheiro')
-          messages    // array de mensagens do chat
+          agent,
+          messages: newMessages
         }
       ]);
       return NextResponse.json({ reply }, { status: 200 });
     }
-
     if (agent === "engenheiro") {
       const systemPrompt = {
         role: "system",
@@ -149,10 +150,11 @@ export async function POST(req: NextRequest) {
       });
       const data = await openaiRes.json();
       const reply = data.choices?.[0]?.message?.content || "Erro na resposta do Engenheiro.";
+      const newMessages = [...messages, { role: "assistant", content: reply }];
       await supabase.from('conversas').insert([
         {
-          agent,      // nome do agente (ex: 'engenheiro')
-          messages    // array de mensagens do chat
+          agent,
+          messages: newMessages
         }
       ]);
       return NextResponse.json({ reply }, { status: 200 });
@@ -176,10 +178,11 @@ export async function POST(req: NextRequest) {
       });
       const data = await openaiRes.json();
       const reply = data.choices?.[0]?.message?.content || "Erro na resposta do Arquiteto.";
+      const newMessages = [...messages, { role: "assistant", content: reply }];
       await supabase.from('conversas').insert([
         {
-          agent,      // nome do agente (ex: 'engenheiro')
-          messages    // array de mensagens do chat
+          agent,
+          messages: newMessages
         }
       ]);
       return NextResponse.json({ reply }, { status: 200 });
@@ -203,10 +206,11 @@ export async function POST(req: NextRequest) {
       });
       const data = await openaiRes.json();
       const reply = data.choices?.[0]?.message?.content || "Erro na resposta do Orçamentos.";
+      const newMessages = [...messages, { role: "assistant", content: reply }];
       await supabase.from('conversas').insert([
         {
-          agent,      // nome do agente (ex: 'engenheiro')
-          messages    // array de mensagens do chat
+          agent,
+          messages: newMessages
         }
       ]);
       return NextResponse.json({ reply }, { status: 200 });
@@ -230,10 +234,11 @@ export async function POST(req: NextRequest) {
       });
       const data = await openaiRes.json();
       const reply = data.choices?.[0]?.message?.content || "Erro na resposta do Planejamento de Obra.";
+      const newMessages = [...messages, { role: "assistant", content: reply }];
       await supabase.from('conversas').insert([
         {
-          agent,      // nome do agente (ex: 'engenheiro')
-          messages    // array de mensagens do chat
+          agent,
+          messages: newMessages
         }
       ]);
       return NextResponse.json({ reply }, { status: 200 });
