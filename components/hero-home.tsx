@@ -1,14 +1,17 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import PageIllustration from "@/components/page-illustration";
-
-
-
-
-
-
+import WavyText from "./WavyText";
 
 export default function HeroHome() {
+  const [showLoader, setShowLoader] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLoader(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <section className="bg-white dark:bg-gray-900">
       <PageIllustration />
@@ -66,12 +69,14 @@ export default function HeroHome() {
                 />
               </div>
             </div>
+
             <h1
-              className="mb-6 border-y text-5xl font-bold [border-image:linear-gradient(to_right,transparent,theme(colors.slate.300/.8),transparent)1] md:text-6xl text-gray-900 dark:text-white"
+              className="tracking-in-expand mb-6 border-y text-5xl font-bold [border-image:linear-gradient(to_right,transparent,theme(colors.slate.300/.8),transparent)1] md:text-6xl text-gray-900 dark:text-white"
               data-aos="zoom-y-out"
               data-aos-delay={150}
             >
-              Impulsionando o Crescimento<br className="max-lg:hidden" />
+              Impulsionando o Crescimento
+              <br className="max-lg:hidden" />
               do Seu Negócio
             </h1>
             <div className="mx-auto max-w-3xl">
@@ -114,8 +119,17 @@ export default function HeroHome() {
               </div>
             </div>
           </div>
-           {/* Hero image */}
-           
+          {/* Hero image */}
+          {showLoader && (
+            <div
+              className="relative flex justify-center items-center mt-12"
+              style={{ minHeight: 120 }}
+            >
+              <div className="loader"></div>
+              <div className="loader"></div>
+              <div className="loader"></div>
+            </div>
+          )}
         </div>
       </div>
     </section>
