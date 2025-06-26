@@ -127,12 +127,19 @@ export default function Agents() {
         <div ref={messagesEndRef} />
       </div>
       <form onSubmit={handleSend} className="flex gap-2 flex-col sm:flex-row w-full">
-        <input
-          className="rounded-xl shadow-md input input-bordered flex-1 min-w-0"
+        <textarea
+          className="rounded-xl shadow-md input input-bordered flex-1 min-w-0 resize-none"
           placeholder="Fala comigo mai frend"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend(e as any);
+            }
+          }}
           disabled={loading}
+          rows={2}
         />
         <button className="btn-primary text-black' : 'btn-outline btn-primary bg-white hover:bg-black hover:text-white border-2 border-primary btn btn-primary w-full sm:w-auto" type="submit" disabled={!input.trim() || loading}>
           {loading ? 'Enviando...' : 'Enviar'}

@@ -106,23 +106,57 @@ export async function POST(req: NextRequest) {
 
     // Adicionado o tratamento para o agente "produtor-conteudo"
     if (agent === "produtor-conteudo") {
-      const systemPrompt = {
-        role: "system",
-        content: `Você é um especialista em produção de conteúdo digital para web, com foco em copywriting, SEO, storytelling e engajamento.\n\nSua tarefa é, a partir do briefing abaixo, gerar:\n- Estrutura de tópicos e seções para o conteúdo\n- Copywriting persuasivo e criativo para cada seção\n- Sugestões de títulos, subtítulos e CTAs\n- Recomendações de palavras-chave para SEO\n- Dicas de storytelling e tom de voz\n- Sugestões de imagens, ilustrações ou recursos visuais\n- Checklist de boas práticas para publicação\n\nUtilize o briefing abaixo como base para entregar um conteúdo completo, otimizado e pronto para publicação.\n\n---\n\n[Briefing do usuário:]\n${messages.map((m: any) => m.content).join("\n")}\n\n---\n\nResponda de forma clara, organizada e com foco em resultados.`
-      };
-      const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+      // Define um sessionId, taskId e callId fixos por agente para manter o histórico agrupado
+      const sessionId = `session-${agent}`;
+      const taskId = `task-${agent}`;
+      const callId = `call-${agent}`;
+      const evoRes = await fetch("https://plane-evo-ai-api.mk9fkk.easypanel.host/api/v1/a2a/113d0943-f29e-485d-bcdf-6a8106447f00", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+          "x-api-key": "ecbcde49-8edc-4709-9f5d-c5d2279ade41"
         },
         body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [systemPrompt],
-        }),
+          jsonrpc: "2.0",
+          method: "message/send",
+          params: {
+            message: {
+              role: "user",
+              parts: [
+                {
+                  type: "text",
+                  text: messages.map((m: any) => m.content).join("\n")
+                }
+              ]
+            },
+            sessionId,
+            id: taskId
+          },
+          id: callId
+        })
       });
-      const data = await openaiRes.json();
-      const reply = data.choices?.[0]?.message?.content || "Erro na resposta do Produtor de Conteúdo.";
+      const text = await evoRes.text();
+      console.log("EvoAI response:", text);
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        return NextResponse.json({ reply: `[Erro EvoAI]: ${text}` }, { status: 500 });
+      }
+      // Extrai a resposta do formato correto
+      let reply = "Erro na resposta do EvoAI.";
+      // Tenta extrair a resposta do local mais comum
+      if (data?.result?.status?.message?.parts?.[0]?.text) {
+        reply = data.result.status.message.parts[0].text;
+      } else if (data?.result?.artifacts?.[0]?.parts?.[0]?.text) {
+        // Alternativa: resposta pode vir em artifacts
+        reply = data.result.artifacts[0].parts[0].text;
+      } else if (data?.error?.message) {
+        reply = `[EvoAI Error]: ${data.error.message}`;
+      } else if (data?.result?.status?.message?.parts) {
+        // Se vier um array de partes, junta tudo
+        reply = data.result.status.message.parts.map((p:any) => p.text).join('\n');
+      }
       const newMessages = [...messages, { role: "assistant", content: reply }];
       await supabase.from('conversas').insert([
         {
