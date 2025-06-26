@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { HamsterLoader } from "./HamsterLoader";
+import { supabase } from "../../utils/supabase/client";
 
 interface Message {
   role: "user" | "assistant";
@@ -22,6 +23,7 @@ export default function Agents() {
   const [input, setInput] = useState("");
   const [selectedAgent, setSelectedAgent] = useState<string>("produtor-site");
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const messages: Message[] = messagesByAgent[selectedAgent] || [];
@@ -30,9 +32,18 @@ export default function Agents() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    // Busca o user_id do usuário autenticado
+    async function fetchUser() {
+      const { data, error } = await supabase.auth.getUser();
+      setUserId(data?.user?.id || null);
+    }
+    fetchUser();
+  }, []);
+
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || !userId) return;
     const newMessages: Message[] = [...messages, { role: "user", content: input }];
     setMessagesByAgent((prev) => ({ ...prev, [selectedAgent]: newMessages }));
     setInput("");
@@ -41,7 +52,7 @@ export default function Agents() {
       const res = await fetch("/api/agents", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMessages, agent: selectedAgent })
+        body: JSON.stringify({ messages: newMessages, agent: selectedAgent, user_id: userId })
       });
       const data = await res.json();
       setMessagesByAgent((prev) => ({
@@ -70,7 +81,8 @@ export default function Agents() {
     setInput("");
     setLoading(true);
     try {
-      const res = await fetch(`/api/agents?agent=${agent}`);
+      if (!userId) return;
+      const res = await fetch(`/api/agents?agent=${agent}&user_id=${userId}`);
       const data = await res.json();
       setMessagesByAgent((prev) => ({ ...prev, [agent]: data.messages || [] }));
     } catch (err) {

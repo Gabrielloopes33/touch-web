@@ -9,15 +9,17 @@ const supabase = createClient(
 
 /* ----------------------------------------------------------------– GET */
 export async function GET(req: NextRequest) {
-  // Permite buscar histórico de um agente: /api/agents?agent=engenheiro
+  // Permite buscar histórico de um agente: /api/agents?agent=engenheiro&user_id=xxx
   const { searchParams } = new URL(req.url!);
   const agent = searchParams.get('agent');
-  if (agent) {
-    // Busca o último histórico desse agente
+  const user_id = searchParams.get('user_id');
+  if (agent && user_id) {
+    // Busca o último histórico desse agente para o usuário
     const { data, error } = await supabase
       .from('conversas')
       .select('messages')
       .eq('agent', agent)
+      .eq('user_id', user_id)
       .order('created_at', { ascending: false })
       .limit(1);
     if (error) {
@@ -32,7 +34,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { messages, agent } = body;
+    const { messages, agent, user_id } = body;
 
     // Só chama a OpenAI se o agente for "produtor-site"
     if (agent === "produtor-site") {
@@ -98,7 +100,8 @@ export async function POST(req: NextRequest) {
       await supabase.from('conversas').insert([
         {
           agent,
-          messages: newMessages
+          messages: newMessages,
+          user_id
         }
       ]);
       return NextResponse.json({ reply }, { status: 200 });
@@ -161,7 +164,8 @@ export async function POST(req: NextRequest) {
       await supabase.from('conversas').insert([
         {
           agent,
-          messages: newMessages
+          messages: newMessages,
+          user_id
         }
       ]);
       return NextResponse.json({ reply }, { status: 200 });
@@ -188,7 +192,8 @@ export async function POST(req: NextRequest) {
       await supabase.from('conversas').insert([
         {
           agent,
-          messages: newMessages
+          messages: newMessages,
+          user_id
         }
       ]);
       return NextResponse.json({ reply }, { status: 200 });
@@ -216,7 +221,8 @@ export async function POST(req: NextRequest) {
       await supabase.from('conversas').insert([
         {
           agent,
-          messages: newMessages
+          messages: newMessages,
+          user_id
         }
       ]);
       return NextResponse.json({ reply }, { status: 200 });
@@ -244,7 +250,8 @@ export async function POST(req: NextRequest) {
       await supabase.from('conversas').insert([
         {
           agent,
-          messages: newMessages
+          messages: newMessages,
+          user_id
         }
       ]);
       return NextResponse.json({ reply }, { status: 200 });
@@ -272,7 +279,8 @@ export async function POST(req: NextRequest) {
       await supabase.from('conversas').insert([
         {
           agent,
-          messages: newMessages
+          messages: newMessages,
+          user_id
         }
       ]);
       return NextResponse.json({ reply }, { status: 200 });
