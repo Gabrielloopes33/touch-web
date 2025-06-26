@@ -1,6 +1,6 @@
 export function HamsterLoader() {
   return (
-    <div className="flex justify-center items-center py-8">
+    <div className="flex justify-center items-center py-10">
       <div className="wheel-and-hamster" aria-label="Orange and tan hamster running in a metal wheel" role="img">
         <div className="wheel"></div>
         <div className="hamster">
