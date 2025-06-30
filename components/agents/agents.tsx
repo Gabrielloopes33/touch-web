@@ -6,7 +6,9 @@ import { supabase } from "../../utils/supabase/client";
 
 interface Message {
   role: "user" | "assistant";
-  content: string;
+  content?: string;
+  type?: "image";
+  url?: string;
 }
 
 const AGENTS = [
@@ -24,6 +26,7 @@ export default function Agents() {
   const [selectedAgent, setSelectedAgent] = useState<string>("produtor-site");
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const messages: Message[] = messagesByAgent[selectedAgent] || [];
@@ -43,8 +46,22 @@ export default function Agents() {
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault();
-    if (!input.trim() || !userId) return;
-    const newMessages: Message[] = [...messages, { role: "user", content: input }];
+    if ((!input.trim() && !imageFile) || !userId) return;
+    let newMessages: Message[] = [...messages];
+    if (input.trim()) {
+      newMessages = [...newMessages, { role: "user", content: input }];
+    }
+    if (imageFile) {
+      // Upload da imagem para o Supabase Storage
+      const fileExt = imageFile.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+      const { data, error } = await supabase.storage.from('chat-images').upload(fileName, imageFile);
+      if (!error && data) {
+        const { publicUrl } = supabase.storage.from('chat-images').getPublicUrl(data.path).data;
+        newMessages = [...newMessages, { role: "user", type: "image", url: publicUrl }];
+      }
+      setImageFile(null);
+    }
     setMessagesByAgent((prev) => ({ ...prev, [selectedAgent]: newMessages }));
     setInput("");
     setLoading(true);
@@ -131,6 +148,9 @@ export default function Agents() {
                   : "bg-base-200 text-base-content rounded-bl-sm mr-auto"
               }`}
             >
+              {msg.type === "image" && msg.url ? (
+                <img src={msg.url} alt="imagem enviada" className="max-w-xs max-h-60 rounded-lg mb-2" />
+              ) : null}
               {msg.content}
             </div>
           </div>
@@ -153,7 +173,14 @@ export default function Agents() {
           disabled={loading}
           rows={2}
         />
-        <button className="btn-primary text-black' : 'btn-outline btn-primary bg-white hover:bg-black hover:text-white border-2 border-primary btn btn-primary w-full sm:w-auto" type="submit" disabled={!input.trim() || loading}>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={e => setImageFile(e.target.files?.[0] || null)}
+          disabled={loading}
+          className="file-input file-input-bordered file-input-primary w-full sm:w-auto"
+        />
+        <button className="btn-primary text-black' : 'btn-outline btn-primary bg-white hover:bg-black hover:text-white border-2 border-primary btn btn-primary w-full sm:w-auto" type="submit" disabled={(!input.trim() && !imageFile) || loading}>
           {loading ? 'Enviando...' : 'Enviar'}
         </button>
       </form>

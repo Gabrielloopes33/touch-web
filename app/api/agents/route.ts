@@ -156,23 +156,53 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ reply }, { status: 200 });
     }
     if (agent === "engenheiro") {
-      const systemPrompt = {
-        role: "system",
-        content: `Você é um engenheiro civil especialista em planejamento, execução e otimização de obras residenciais, comerciais e industriais.\n\nSua tarefa é, a partir do briefing abaixo, gerar:\n- Análise técnica do projeto\n- Sugestões de soluções construtivas e materiais\n- Cronograma físico-financeiro resumido\n- Dicas para redução de custos e aumento de eficiência\n- Recomendações de normas técnicas e segurança\n- Checklist de etapas essenciais da obra\n- Riscos e pontos de atenção\n\nUtilize o briefing abaixo como base para entregar um plano de obra claro, seguro e eficiente.\n\n---\n\n[Briefing do usuário:]\n${messages.map((m: any) => m.content).join("\n")}\n\n---\n\nResponda de forma técnica, prática e didática.`
-      };
-      const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+      const agentId = "ffc814ef-ebaa-4d26-a1f3-d74779d0a0c5";
+      // Monta as partes multimodais para o EvoAI
+      const parts = messages.flatMap((m: any) => {
+        if (m.type === "image" && m.url) {
+          return [{ type: "image_url", image_url: { url: m.url } }];
+        } else if (m.content) {
+          return [{ type: "text", text: m.content }];
+        }
+        return [];
+      });
+      const evoRes = await fetch(`https://plane-evo-ai-api.mk9fkk.easypanel.host/api/v1/a2a/${agentId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+          "x-api-key": "1426c8b0-673b-4362-b5cc-e0044f6115ed"
         },
         body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [systemPrompt],
-        }),
+          jsonrpc: "2.0",
+          method: "message/send",
+          params: {
+            message: {
+              role: "user",
+              parts
+            },
+            sessionId: `session-${agent}`,
+            id: `task-${agent}`
+          },
+          id: `call-${agent}`
+        })
       });
-      const data = await openaiRes.json();
-      const reply = data.choices?.[0]?.message?.content || "Erro na resposta do Engenheiro.";
+      const text = await evoRes.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        return NextResponse.json({ reply: `[Erro EvoAI]: ${text}` }, { status: 500 });
+      }
+      let reply = "Erro na resposta do EvoAI.";
+      if (data?.result?.status?.message?.parts?.[0]?.text) {
+        reply = data.result.status.message.parts[0].text;
+      } else if (data?.result?.artifacts?.[0]?.parts?.[0]?.text) {
+        reply = data.result.artifacts[0].parts[0].text;
+      } else if (data?.error?.message) {
+        reply = `[EvoAI Error]: ${data.error.message}`;
+      } else if (data?.result?.status?.message?.parts) {
+        reply = data.result.status.message.parts.map((p:any) => p.text).join('\n');
+      }
       const newMessages = [...messages, { role: "assistant", content: reply }];
       await supabase.from('conversas').insert([
         {
