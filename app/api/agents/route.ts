@@ -36,66 +36,51 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { messages, agent, user_id } = body;
 
-    // Só chama a OpenAI se o agente for "produtor-site"
+    // EvoAI para o agente 'produtor-site'
     if (agent === "produtor-site") {
-      // Subagentes: UX, Copywriter, Dev Front-end
-      const prompts = [
-        {
-          name: "UX Designer",
-          prompt: `Você é um especialista em UX/UI para landing pages. Gere uma estrutura completa de seções e um wireframe textual detalhado para uma landing page, considerando o briefing abaixo. Seja objetivo e prático.`
-        },
-        {
-          name: "Copywriter",
-          prompt: `Você é um copywriter especialista em conversão para landing pages. Gere o copywriting completo e estratégico para cada seção da landing page, considerando o briefing abaixo. Use técnicas de persuasão e clareza.`
-        },
-        {
-          name: "Dev Front-end",
-          prompt: `Você é um desenvolvedor front-end especialista em Next.js, TailwindCSS e shadcn/ui. Sugira os melhores componentes, bibliotecas, arquitetura técnica e microinterações para implementar a landing page do briefing abaixo.`
-        }
-      ];
-
-      const results = [];
-      for (const sub of prompts) {
-        const systemPrompt = {
-          role: "system",
-          content: `${sub.prompt}\n\nBriefing:\n${messages.map((m: any) => m.content).join("\n")}`
-        };
-        const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [systemPrompt],
-          }),
-        });
-        const data = await openaiRes.json();
-        results.push({
-          agent: sub.name,
-          reply: data.choices?.[0]?.message?.content || `Erro na resposta do agente ${sub.name}`
-        });
-      }
-
-      // Após obter as respostas dos subagentes, compilar tudo com um quarto agente (Compilador)
-      const compiledPrompt = {
-        role: "system",
-        content: `Você é um especialista em síntese e compilação de informações para projetos de landing page. Receberá abaixo as respostas de três especialistas (UX Designer, Copywriter e Dev Front-end) sobre o mesmo briefing. Sua tarefa é compilar, organizar e apresentar uma resposta única, clara e estruturada, integrando as melhores ideias de cada especialista para entregar um plano de landing page completo, coeso e pronto para implementação.\n\nRespostas dos especialistas:\n${results.map(r => `---\n${r.agent}:\n${r.reply}`).join("\n\n")}`
-      };
-      const openaiResCompiled = await fetch("https://api.openai.com/v1/chat/completions", {
+      const agentId = "87ce2913-ac66-4123-baf0-64a0d166e9ed";
+      const evoRes = await fetch(`https://plane-evo-ai-api.mk9fkk.easypanel.host/api/v1/a2a/${agentId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+          "x-api-key": "9ae9f223-df1b-440e-abf8-a1236395d596"
         },
         body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [compiledPrompt],
-        }),
+          jsonrpc: "2.0",
+          method: "message/send",
+          params: {
+            message: {
+              role: "user",
+              parts: [
+                {
+                  type: "text",
+                  text: messages.map((m: any) => m.content).join("\n")
+                }
+              ]
+            },
+            sessionId: `session-${agent}`,
+            id: `task-${agent}`
+          },
+          id: `call-${agent}`
+        })
       });
-      const dataCompiled = await openaiResCompiled.json();
-      const reply = dataCompiled.choices?.[0]?.message?.content || "Erro ao compilar as respostas dos agentes.";
+      const text = await evoRes.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        return NextResponse.json({ reply: `[Erro EvoAI]: ${text}` }, { status: 500 });
+      }
+      let reply = "Erro na resposta do EvoAI.";
+      if (data?.result?.status?.message?.parts?.[0]?.text) {
+        reply = data.result.status.message.parts[0].text;
+      } else if (data?.result?.artifacts?.[0]?.parts?.[0]?.text) {
+        reply = data.result.artifacts[0].parts[0].text;
+      } else if (data?.error?.message) {
+        reply = `[EvoAI Error]: ${data.error.message}`;
+      } else if (data?.result?.status?.message?.parts) {
+        reply = data.result.status.message.parts.map((p:any) => p.text).join('\n');
+      }
       const newMessages = [...messages, { role: "assistant", content: reply }];
       await supabase.from('conversas').insert([
         {
