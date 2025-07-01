@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Logo from "@/components/ui/logo";
+import Header from "@/components/ui/header";
 
 
 export default function AuthLayout({
@@ -10,13 +11,8 @@ export default function AuthLayout({
 }) {
   return (
     <>
-      <header className="absolute z-30 w-full">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          
-        </div>
-      </header>
-
-      <main className="relative flex grow">
+      <Header />
+      <main className="grow">
         <div
           className="pointer-events-none absolute bottom-0 left-0 -translate-x-1/3"
           aria-hidden="true"

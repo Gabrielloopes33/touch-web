@@ -1,6 +1,7 @@
 import React from "react";
 //import '../../app/globals.css'
 import { Righteous } from 'next/font/google'
+import Header from "@/components/ui/header";
 
 const MainFontFamily = Righteous({
   weight: ['400'],
@@ -23,7 +24,8 @@ export default function LinksLayout({
 }) {
     return (
         <div className={MainFontFamily.className}>
-            {children}
+          <Header />
+          <main className="grow">{children}</main>
         </div>
     )
-} 
+}

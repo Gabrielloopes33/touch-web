@@ -4,7 +4,6 @@ import "../css/additional-styles/tracking-in-expand.css";
 import "../css/additional-styles/uiverse-loader.css";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
-import Header from '@/components/ui/header';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,7 +28,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full scroll-smooth" suppressHydrationWarning>
       <body className="flex h-full flex-col dark:bg-gray-900">
-        <Header />
         <main className="grow">
           {children}
         </main>
