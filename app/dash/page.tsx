@@ -1,43 +1,25 @@
-"use client";
-import React from "react";
-
-import { useEffect, useState } from "react";
-
-// Definindo a estrutura dos dados que serão recebidos da API
-interface Metric {
-  Data: string;
-  Impressões: number;
-  Alcance: number;
-  Seguidores: number;
-}
+'use client';
+import React from 'react';
+import SpendChart from '@/components/charts/spend-chart';
 
 export default function Dashboard() {
-  const [metrics, setMetrics] = useState<Metric[]>([]);
-
-  useEffect(() => {
-    fetch("/api/metrics") // Temporariamente pega os dados gerais
-      .then(res => res.json())
-      .then((data: Metric[]) => setMetrics(data)) // Tipando a resposta da API
-      .catch(err => console.error("Erro ao buscar métricas:", err));
-  }, []);
-
   return (
-    <div>
-      <h1>Painel de Métricas</h1>
-      {metrics.length > 0 ? (
-        <ul>
-          {metrics.map((metric, index) => (
-            <li key={index}>
-              <strong>Data:</strong> {metric.Data} | 
-              <strong> Impressões:</strong> {metric.Impressões} | 
-              <strong> Alcance:</strong> {metric.Alcance} | 
-              <strong> Seguidores:</strong> {metric.Seguidores}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>Carregando métricas...</p>
-      )}
-    </div>
+    <section className="relative">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="pt-32 pb-12 md:pt-40 md:pb-20">
+
+          {/* Page header */}
+          <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
+            <h1 className="h1">Painel de Métricas</h1>
+          </div>
+
+          {/* Gráfico de Investimento */}
+          <div className="max-w-4xl mx-auto">
+            <SpendChart />
+          </div>
+
+        </div>
+      </div>
+    </section>
   );
 }
