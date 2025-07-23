@@ -6,7 +6,7 @@ import { useCallback } from "react";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import type { Engine } from "tsparticles-engine";
-import { links } from '@/links/links';
+import { links } from './links';
 
 const LinksPage = () => {
     const particlesInit = useCallback(async (engine: Engine) => {
