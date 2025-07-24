@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '../hooks/useAuth';
+import LoadingSpinner from './LoadingSpinner';
 import Link from 'next/link';
 
 interface AuthGuardProps {
@@ -14,7 +15,7 @@ export default function AuthGuard({ children, fallback }: AuthGuardProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg">Verificando autenticação...</div>
+        <LoadingSpinner size="lg" text="Verificando autenticação..." />
       </div>
     );
   }

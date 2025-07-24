@@ -3,6 +3,7 @@
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import Header from "@/components/ui/header"; // Certifique-se de que o caminho está correto
+import LoadingSpinner from "../../../components/LoadingSpinner";
 import { supabase } from "../../../utils/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -116,7 +117,7 @@ export default function SignIn() {
             <h1 className="text-4xl font-bold">Faça login na sua conta</h1>
           </div>
           <div className="flex justify-center items-center h-32">
-            <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+            <LoadingSpinner size="md" text="Carregando..." />
           </div>
         </div>
       }>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import LoadingSpinner from './LoadingSpinner';
 
 interface Agent {
   id?: string;
@@ -36,8 +37,16 @@ export default function AgentsDebug() {
   }
 
   return (
-    <pre className="mt-10 p-4 bg-slate-100 rounded text-xs overflow-auto">
-      {data ? JSON.stringify(data, null, 2) : 'Carregando…'}
-    </pre>
+    <div className="mt-10">
+      {data ? (
+        <pre className="p-4 bg-slate-100 rounded text-xs overflow-auto">
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      ) : (
+        <div className="flex justify-center p-4">
+          <LoadingSpinner size="md" text="Carregando dados dos agentes..." />
+        </div>
+      )}
+    </div>
   );
 }

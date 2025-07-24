@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { HamsterLoader } from "./HamsterLoader";
 import { supabase } from "../../utils/supabase/client";
 import EvoAIChat from "../EvoAIChat";
 

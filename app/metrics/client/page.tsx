@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import ClientAnalysis from '../../../components/ClientAnalysis';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
@@ -44,10 +45,7 @@ export default function ClientPage() {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Carregando análise do cliente...</p>
-        </div>
+        <LoadingSpinner size="lg" text="Carregando análise do cliente..." />
       </div>
     }>
       <ClientPageContent />

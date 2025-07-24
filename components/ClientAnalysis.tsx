@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import AuthNavigation from './AuthNavigation';
+import LoadingSpinner from './LoadingSpinner';
 import {
   BarChart,
   Bar,
@@ -111,7 +112,7 @@ const ClientAnalysis: React.FC<ClientAnalysisProps> = ({ clientId }) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg">Carregando dados do cliente...</div>
+        <LoadingSpinner size="lg" text="Carregando dados do cliente..." />
       </div>
     );
   }

@@ -2,6 +2,7 @@
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useEffect, useState } from 'react';
+import LoadingSpinner from '../LoadingSpinner';
 
 // Define a type for our data to ensure type safety
 interface MetricData {
@@ -43,7 +44,11 @@ export default function SpendChart() {
   }, []);
 
   if (loading) {
-    return <div>Carregando dados...</div>;
+    return (
+      <div className="flex items-center justify-center p-8">
+        <LoadingSpinner size="lg" text="Carregando dados do gráfico..." />
+      </div>
+    );
   }
 
   if (error) {

@@ -3,6 +3,7 @@
 import { useAuth } from '../hooks/useAuth';
 import { supabase } from '../utils/supabase/client';
 import { useRouter } from 'next/navigation';
+import LoadingSpinner from './LoadingSpinner';
 
 export default function AuthNavigation() {
   const { user, loading } = useAuth();
@@ -18,7 +19,7 @@ export default function AuthNavigation() {
   if (loading) {
     return (
       <div className="flex items-center space-x-4">
-        <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+        <LoadingSpinner size="sm" text="" className="scale-75" />
       </div>
     );
   }
