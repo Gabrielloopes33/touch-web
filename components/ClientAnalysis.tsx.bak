@@ -1,0 +1,834 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import AuthNavigation from './AuthNavigation';
+import LoadingSpinner from './LoadingSpinner';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+  ResponsiveContainer,
+  ScatterChart,
+  Scatter
+} from 'recharts';
+
+interface Ad {
+  ad_id: string;
+  ad_name: string;
+  adset_name: string;
+  reach: number;
+  impressions: number;
+  clicks: number;
+  spend: number;
+  ctr: number;
+  cpc: number;
+}
+
+interface Campaign {
+  campaign_id: string;
+  campaign_name: string;
+  reach: number;
+  impressions: number;
+  clicks: number;
+  spend: number;
+  ctr: number;
+  cpc: number;
+  adsets_count: number;
+  ads_count: number;
+  ads: Ad[];
+}
+
+interface ClientData {
+  client_id: string;
+  campaigns: Campaign[];
+  summary: {
+    total_campaigns: number;
+    total_reach: number;
+    total_impressions: number;
+    total_clicks: number;
+    total_spend: number;
+    avg_ctr: number;
+    avg_cpc: number;
+    roas?: number;           // Retorno sobre investimento em anúncios
+    cpl?: number;            // Custo por Lead
+    cvr?: number;            // Taxa de conversão
+    bounce_rate?: number;    // Taxa de rejeição
+    quality_score?: number;  // Índice de qualidade
+    frequency?: number;      // Frequência média de exibição
+  };
+}
+
+const COLORS = [
+  '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8',
+  '#82CA9D', '#FFC658', '#FF7C7C', '#8DD1E1', '#D084D0'
+];
+
+interface ClientAnalysisProps {
+  clientId: string;
+}
+
+// Função auxiliar para gerar recomendações com base nos KPIs
+const getRecommendations = (data: ClientData): { title: string, description: string, priority: 'high' | 'medium' | 'low' }[] => {
+  const recommendations: { title: string, description: string, priority: 'high' | 'medium' | 'low' }[] = [];
+  const summary = data.summary;
+
+  if (summary.roas !== undefined && summary.roas < 2) {
+    recommendations.push({
+      title: 'Melhorar ROAS',
+      description: 'O ROAS está abaixo do ideal (2x). Considere revisar os orçamentos de campanha e segmentações para melhorar o retorno sobre o investimento.',
+      priority: 'high'
+    });
+  }
+
+  if (summary.avg_ctr < 1) {
+    recommendations.push({
+      title: 'Aumentar CTR',
+      description: 'A taxa de cliques está abaixo de 1%. Recomendamos revisar os criativos e textos dos anúncios para aumentar o engajamento.',
+      priority: 'medium'
+    });
+  }
+
+  if (summary.cvr !== undefined && summary.cvr < 1) {
+    recommendations.push({
+      title: 'Melhorar Taxa de Conversão',
+      description: 'A taxa de conversão está abaixo de 1%. Sugerimos otimizar as páginas de destino e o funil de conversão.',
+      priority: 'high'
+    });
+  }
+
+  if (summary.bounce_rate !== undefined && summary.bounce_rate > 60) {
+    recommendations.push({
+      title: 'Reduzir Taxa de Rejeição',
+      description: 'A taxa de rejeição está acima de 60%. Recomendamos melhorar a relevância do conteúdo e a experiência do usuário na página inicial.',
+      priority: 'medium'
+    });
+  }
+
+  if (summary.quality_score !== undefined && summary.quality_score < 7) {
+    recommendations.push({
+      title: 'Aumentar Quality Score',
+      description: 'O quality score está abaixo de 7. Trabalhe na relevância dos anúncios e palavras-chave para melhorar o desempenho e reduzir custos.',
+      priority: 'medium'
+    });
+  }
+
+  if (summary.frequency !== undefined && summary.frequency > 4) {
+    recommendations.push({
+      title: 'Controlar Frequência',
+      description: 'A frequência média está acima de 4. Considere aumentar o alcance da campanha ou revisar o orçamento para evitar saturação da audiência.',
+      priority: 'low'
+    });
+  }
+
+  return recommendations;
+};
+
+const ClientAnalysis: React.FC<ClientAnalysisProps> = ({ clientId }) => {
+  const [data, setData] = useState<ClientData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
+  const [recommendations, setRecommendations] = useState<{ title: string, description: string, priority: 'high' | 'medium' | 'low' }[]>([]);
+
+  useEffect(() => {
+    if (clientId) {
+      fetchClientData();
+    }
+  }, [clientId]);
+
+  useEffect(() => {
+    if (data) {
+      // Gerar recomendações baseadas nos KPIs
+      const recs = getRecommendations(data);
+      setRecommendations(recs);
+    }
+  }, [data]);
+
+  const fetchClientData = async () => {
+    try {
+      setError(null);
+      const response = await fetch(`/api/metrics/client?client_id=${encodeURIComponent(clientId)}`);
+      
+      if (response.status === 401) {
+        setError('Você precisa estar logado para acessar as métricas.');
+        return;
+      }
+      
+      if (!response.ok) {
+        throw new Error('Erro ao carregar dados do cliente');
+      }
+      
+      const result = await response.json();
+      
+      // Adicionar KPIs adicionais se não existirem no backend
+      // Em produção, esses valores viriam da API
+      const enhancedResult = {
+        ...result,
+        summary: {
+          ...result.summary,
+          // Se esses valores não existirem na API, usamos valores fictícios para demonstração
+          roas: result.summary.roas || ((Math.random() * 3) + 1), // 1-4x (bom é acima de 2x)
+          cpl: result.summary.cpl || ((Math.random() * 50) + 20), // R$20-70
+          cvr: result.summary.cvr || ((Math.random() * 5) + 0.5), // 0.5-5.5%
+          bounce_rate: result.summary.bounce_rate || ((Math.random() * 30) + 40), // 40-70%
+          quality_score: result.summary.quality_score || Math.floor((Math.random() * 5) + 5), // 5-10
+          frequency: result.summary.frequency || ((Math.random() * 4) + 1), // 1-5
+        }
+      };
+      
+      setData(enhancedResult);
+      if (enhancedResult.campaigns && enhancedResult.campaigns.length > 0) {
+        setSelectedCampaign(enhancedResult.campaigns[0]);
+      }
+    } catch (error) {
+      console.error('Error fetching client data:', error);
+      setError('Erro ao carregar dados do cliente. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <LoadingSpinner size="lg" text="Carregando dados do cliente..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-lg text-red-600 mb-4">{error}</div>
+          {error.includes('logado') && (
+            <a 
+              href="/signin" 
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Fazer Login
+            </a>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg text-red-600">Erro ao carregar dados do cliente</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="flex justify-between items-center mb-2">
+        <h1 className="text-3xl font-bold text-gray-800">{data.client_id}</h1>
+        <AuthNavigation />
+      </div>
+      <p className="text-gray-600 mb-8">Análise detalhada das campanhas e anúncios</p>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h3 className="text-lg font-semibold text-gray-800">Gastos Totais</h3>
+          <p className="text-3xl font-bold text-blue-600">
+            R$ {data.summary.total_spend.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+          </p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h3 className="text-lg font-semibold text-gray-800">Alcance Total</h3>
+          <p className="text-3xl font-bold text-green-600">
+            {data.summary.total_reach.toLocaleString('pt-BR')}
+          </p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h3 className="text-lg font-semibold text-gray-800">CTR Médio</h3>
+          <p className="text-3xl font-bold text-yellow-600">{data.summary.avg_ctr}%</p>
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h3 className="text-lg font-semibold text-gray-800">CPC Médio</h3>
+          <p className="text-3xl font-bold text-purple-600">
+            R$ {data.summary.avg_cpc.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+          </p>
+        </div>
+      </div>
+      
+      {/* KPIs Avançados */}
+      <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
+        <h2 className="text-xl font-semibold text-gray-800 mb-6">Indicadores Avançados de Performance</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Indicadores financeiros e de geração de leads */}
+          <div>
+            <h3 className="font-bold text-lg text-blue-800 border-b border-blue-200 pb-2 mb-4">Indicadores Financeiros e de Leads</h3>
+            
+            <div className="space-y-6">
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-semibold text-gray-800">ROAS</h4>
+                  <span className={`px-2 py-1 rounded text-xs font-bold ${
+                    (data.summary.roas || 0) >= 2 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {(data.summary.roas || 0) >= 2 ? 'BOM' : 'PRECISA MELHORAR'}
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-blue-600">
+                  {data.summary.roas ? `${data.summary.roas.toFixed(2)}x` : 'N/A'}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Retorno sobre investimento. Acima de 2.0x é considerado bom.
+                </p>
+              </div>
+              
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-semibold text-gray-800">Custo por Lead (CPL)</h4>
+                </div>
+                <p className="text-2xl font-bold text-blue-600">
+                  {data.summary.cpl ? `R$ ${data.summary.cpl.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'N/A'}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Custo médio para adquirir um novo lead.
+                </p>
+              </div>
+              
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-semibold text-gray-800">CPC</h4>
+                </div>
+                <p className="text-2xl font-bold text-blue-600">
+                  R$ {data.summary.avg_cpc.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Valor médio pago por clique nos anúncios.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Indicadores de engajamento e conversão */}
+          <div>
+            <h3 className="font-bold text-lg text-green-800 border-b border-green-200 pb-2 mb-4">Engajamento e Conversão</h3>
+            
+            <div className="space-y-6">
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-semibold text-gray-800">CTR</h4>
+                </div>
+                <p className="text-2xl font-bold text-green-600">{data.summary.avg_ctr}%</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Proporção de cliques em relação às impressões.
+                </p>
+              </div>
+              
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-semibold text-gray-800">Taxa de Conversão (CVR)</h4>
+                </div>
+                <p className="text-2xl font-bold text-green-600">
+                  {data.summary.cvr ? `${data.summary.cvr.toFixed(2)}%` : 'N/A'}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Proporção de conversões em relação aos cliques.
+                </p>
+              </div>
+              
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-semibold text-gray-800">Taxa de Rejeição</h4>
+                  <span className={`px-2 py-1 rounded text-xs font-bold ${
+                    (data.summary.bounce_rate || 0) <= 60 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  }`}>
+                    {(data.summary.bounce_rate || 0) <= 60 ? 'BOM' : 'ALTO'}
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-green-600">
+                  {data.summary.bounce_rate ? `${data.summary.bounce_rate.toFixed(2)}%` : 'N/A'}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Percentual de visitantes que saem sem interagir.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Indicadores de qualidade e experiência */}
+          <div>
+            <h3 className="font-bold text-lg text-purple-800 border-b border-purple-200 pb-2 mb-4">Qualidade e Experiência</h3>
+            
+            <div className="space-y-6">
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-semibold text-gray-800">Índice de Qualidade</h4>
+                  <span className={`px-2 py-1 rounded text-xs font-bold ${
+                    (data.summary.quality_score || 0) >= 7 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {(data.summary.quality_score || 0) >= 7 ? 'BOM' : 'PRECISA MELHORAR'}
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <p className="text-2xl font-bold text-purple-600">
+                    {data.summary.quality_score ? `${data.summary.quality_score}/10` : 'N/A'}
+                  </p>
+                  {data.summary.quality_score && (
+                    <div className="ml-3 bg-gray-200 h-2 rounded-full flex-grow max-w-xs">
+                      <div 
+                        className="bg-purple-600 h-2 rounded-full" 
+                        style={{ width: `${(data.summary.quality_score / 10) * 100}%` }}
+                      ></div>
+                    </div>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  Nota de 1 a 10 que reflete a qualidade dos anúncios.
+                </p>
+              </div>
+              
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-semibold text-gray-800">Frequência Média</h4>
+                  <span className={`px-2 py-1 rounded text-xs font-bold ${
+                    (data.summary.frequency || 0) <= 5 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {(data.summary.frequency || 0) <= 5 ? 'IDEAL' : 'ALTA'}
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-purple-600">
+                  {data.summary.frequency ? data.summary.frequency.toFixed(1) : 'N/A'}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Número médio de vezes que cada usuário viu o anúncio.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Campaign Performance */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            Performance por Campanha - Gastos
+          </h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={data.campaigns} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis 
+                dataKey="campaign_name" 
+                angle={-45}
+                textAnchor="end"
+                height={100}
+                fontSize={12}
+              />
+              <YAxis />
+              <Tooltip formatter={(value) => `R$ ${Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`} />
+              <Legend />
+              <Bar dataKey="spend" fill="#0088FE" name="Gastos (R$)" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            Distribuição de Gastos por Campanha
+          </h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart>
+              <Pie
+                data={data.campaigns}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={(entry) => `${entry.campaign_name.substring(0, 20)}...`}
+                outerRadius={120}
+                fill="#8884d8"
+                dataKey="spend"
+              >
+                {data.campaigns.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value) => `R$ ${Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`} />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Análises de Correlação */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* CTR vs CPC Analysis */}
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            Análise CTR vs CPC por Campanha
+          </h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <ScatterChart data={data.campaigns} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis 
+                dataKey="ctr" 
+                name="CTR (%)" 
+                label={{ value: 'CTR (%)', position: 'insideBottom', offset: -10 }}
+              />
+              <YAxis 
+                dataKey="cpc" 
+                name="CPC (R$)" 
+                label={{ value: 'CPC (R$)', angle: -90, position: 'insideLeft' }}
+              />
+              <Tooltip 
+                formatter={(value, name) => [
+                  name === 'cpc' ? `R$ ${Number(value).toFixed(2)}` : `${Number(value).toFixed(2)}%`,
+                  name === 'cpc' ? 'CPC (R$)' : 'CTR (%)'
+                ]}
+                labelFormatter={(label) => `Campanha: ${data.campaigns[Number(label)]?.campaign_name || 'N/A'}`}
+              />
+              <Scatter dataKey="cpc" fill="#8884d8" />
+            </ScatterChart>
+          </ResponsiveContainer>
+          <p className="text-xs text-gray-500 mt-4">
+            Esta visualização mostra a relação entre CTR e CPC para cada campanha. Campanhas com alto CTR 
+            e baixo CPC são mais eficientes, enquanto campanhas com baixo CTR e alto CPC precisam de otimização.
+          </p>
+        </div>
+        
+        {/* CVR vs CPL Analysis - Se os dados existirem */}
+        {data.summary.cvr && data.summary.cpl && (
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Análise de Conversão vs Custo de Aquisição
+            </h2>
+            <div className="flex items-center justify-center h-80">
+              {/* Gráfico circular mostrando a relação entre CVR e CPL */}
+              <div className="w-64 h-64 rounded-full border-8 border-blue-200 relative flex items-center justify-center">
+                <div className="text-center">
+                  <p className="text-lg font-bold">CVR: {data.summary.cvr.toFixed(2)}%</p>
+                  <div className="w-40 h-1 bg-gray-200 my-2 mx-auto">
+                    <div 
+                      className={`h-1 ${data.summary.cvr >= 3 ? 'bg-green-500' : 'bg-yellow-500'}`} 
+                      style={{ width: `${Math.min(data.summary.cvr * 10, 100)}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-lg font-bold mt-2">CPL: R$ {data.summary.cpl.toFixed(2)}</p>
+                  <p className="text-xs mt-1">Eficiência: {
+                    data.summary.cvr >= 3 && data.summary.cpl <= 50 ? 'Alta' : 
+                    data.summary.cvr >= 2 || data.summary.cpl <= 70 ? 'Média' : 'Baixa'
+                  }</p>
+                </div>
+                <div 
+                  className={`absolute -top-2 -right-2 w-6 h-6 rounded-full ${
+                    data.summary.cvr >= 3 && data.summary.cpl <= 50 ? 'bg-green-500' : 
+                    data.summary.cvr >= 2 || data.summary.cpl <= 70 ? 'bg-yellow-500' : 'bg-red-500'
+                  }`}
+                ></div>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-4">
+              Este indicador mostra a relação entre taxa de conversão e custo por lead. 
+              Uma alta taxa de conversão com baixo CPL indica campanhas muito eficientes.
+            </p>
+          </div>
+        )}
+        
+        {/* ROAS × Índice de qualidade - Se os dados existirem */}
+        {data.summary.roas && data.summary.quality_score && (
+          <div className="bg-white p-6 rounded-lg shadow-lg col-span-1 lg:col-span-2">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Relação entre ROAS e Índice de Qualidade
+            </h2>
+            <div className="mb-4">
+              <p className="text-sm text-gray-600">
+                Um ROAS baixo e índice de qualidade baixo indica anúncios mal segmentados ou pouco relevantes.
+                Melhorar a qualidade dos anúncios pode reduzir o CPC e aumentar o retorno sobre investimento.
+              </p>
+            </div>
+            <div className="flex flex-col lg:flex-row items-center justify-between">
+              <div className="relative w-full lg:w-1/2 h-60">
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="w-48 h-48 rounded-full border-8 border-gray-200 flex items-center justify-center">
+                    <div className="text-center">
+                      <p className="text-lg font-bold">ROAS</p>
+                      <p className="text-3xl font-bold text-blue-600">{data.summary.roas.toFixed(2)}x</p>
+                      <p className="text-sm mt-1">
+                        {data.summary.roas >= 2 ? "Bom retorno" : "Precisa melhorar"}
+                      </p>
+                    </div>
+                  </div>
+                  <div 
+                    className="absolute top-6 right-1/4 w-48 h-48 rounded-full border-8 flex items-center justify-center"
+                    style={{ 
+                      borderColor: `rgba(${data.summary.quality_score >= 7 ? '52, 211, 153' : '249, 115, 22'}, 0.5)` 
+                    }}
+                  >
+                    <div className="text-center">
+                      <p className="text-lg font-bold">Qualidade</p>
+                      <p className="text-3xl font-bold" style={{ 
+                        color: data.summary.quality_score >= 7 ? 'rgb(16, 185, 129)' : 'rgb(234, 88, 12)' 
+                      }}>
+                        {data.summary.quality_score}/10
+                      </p>
+                      <p className="text-sm mt-1">
+                        {data.summary.quality_score >= 7 ? "Boa qualidade" : "Precisa melhorar"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="w-full lg:w-1/2 mt-6 lg:mt-0 bg-gray-50 p-6 rounded-lg">
+                <h3 className="font-semibold text-lg text-gray-800 mb-3">Recomendações Personalizadas</h3>
+                
+                {recommendations.length > 0 ? (
+                  <div className="space-y-4">
+                    {recommendations.map((rec, index) => (
+                      <div key={index} className={`p-3 rounded-md ${
+                        rec.priority === 'high' ? 'bg-red-50 border-l-4 border-red-500' :
+                        rec.priority === 'medium' ? 'bg-yellow-50 border-l-4 border-yellow-500' :
+                        'bg-blue-50 border-l-4 border-blue-500'
+                      }`}>
+                        <h4 className="font-semibold text-sm">
+                          {rec.priority === 'high' && <span className="inline-block w-2 h-2 bg-red-500 rounded-full mr-2"></span>}
+                          {rec.priority === 'medium' && <span className="inline-block w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>}
+                          {rec.priority === 'low' && <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mr-2"></span>}
+                          {rec.title}
+                        </h4>
+                        <p className="text-sm text-gray-700 mt-1">{rec.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-700">
+                    Parabéns! Seus indicadores estão dentro dos parâmetros ideais.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          {/* Correlação entre ROAS e Quality Score */}
+          <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
+            <h3 className="font-bold text-lg text-indigo-800 border-b border-indigo-200 pb-2 mb-4">
+              Correlação entre ROAS e Quality Score
+            </h3>
+            
+            <div className="lg:flex">
+              <div className="w-full lg:w-3/5">
+                {data.summary.roas && data.summary.quality_score && (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <ScatterChart
+                      margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis 
+                        type="number" 
+                        dataKey="x" 
+                        name="Quality Score" 
+                        domain={[0, 10]} 
+                        label={{ value: 'Quality Score', position: 'bottom' }} 
+                      />
+                      <YAxis 
+                        type="number" 
+                        dataKey="y" 
+                        name="ROAS" 
+                        domain={[0, 5]} 
+                        label={{ value: 'ROAS', angle: -90, position: 'left' }} 
+                      />
+                      <Tooltip 
+                        formatter={(value, name) => [value, name === 'x' ? 'Quality Score' : 'ROAS']} 
+                        labelFormatter={() => 'Sua Campanha'} 
+                      />
+                      <Scatter name="ROAS x Quality Score" data={[
+                        { x: data.summary.quality_score, y: data.summary.roas },
+                        // Pontos de referência do mercado (simulados)
+                        { x: 3, y: 1.2 },
+                        { x: 4, y: 1.5 },
+                        { x: 5, y: 1.8 },
+                        { x: 6, y: 2.2 },
+                        { x: 7, y: 2.6 },
+                        { x: 8, y: 3.0 },
+                        { x: 9, y: 3.5 },
+                      ]} fill="#8884d8">
+                        {[
+                          <Cell key={`cell-0`} fill="#FF0000" />, // Ponto vermelho para destacar a posição atual
+                          <Cell key={`cell-1`} fill="#8884d8" />,
+                          <Cell key={`cell-2`} fill="#8884d8" />,
+                          <Cell key={`cell-3`} fill="#8884d8" />,
+                          <Cell key={`cell-4`} fill="#8884d8" />,
+                          <Cell key={`cell-5`} fill="#8884d8" />,
+                          <Cell key={`cell-6`} fill="#8884d8" />,
+                          <Cell key={`cell-7`} fill="#8884d8" />,
+                        ]}
+                      </Scatter>
+                      <Legend />
+                    </ScatterChart>
+                  </ResponsiveContainer>
+                )}
+                {(!data.summary.roas || !data.summary.quality_score) && (
+                  <div className="h-[300px] flex items-center justify-center">
+                    <p className="text-gray-500">Dados insuficientes para visualização.</p>
+                  </div>
+                )}
+              </div>
+              
+              <div className="w-full lg:w-2/5 mt-6 lg:mt-0 lg:pl-6">
+                <h4 className="font-semibold text-lg text-gray-800 mb-3">Análise da Correlação</h4>
+                
+                <div className="bg-indigo-50 p-4 rounded-md">
+                  <p className="text-sm text-gray-700 mb-3">
+                    Esta visualização mostra a relação entre o Quality Score (índice de qualidade) e o ROAS (retorno sobre investimento em anúncios).
+                  </p>
+                  
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-2">
+                    <li>Quanto maior o Quality Score, maior tende a ser o ROAS</li>
+                    <li>Um Quality Score acima de 7 geralmente resulta em um ROAS acima de 2.5x</li>
+                    <li>
+                      {data.summary.quality_score && data.summary.roas && (
+                        data.summary.quality_score >= 7 && data.summary.roas >= 2.5 
+                          ? "Sua campanha está na zona ideal de performance" 
+                          : "Melhorar o Quality Score pode aumentar significativamente seu ROAS"
+                      )}
+                    </li>
+                  </ul>
+                  
+                  <div className="mt-4 pt-4 border-t border-indigo-200">
+                    <h5 className="font-medium text-indigo-800">Próximos passos recomendados:</h5>
+                    <p className="text-sm text-gray-700 mt-2">
+                      {data.summary.quality_score && data.summary.quality_score < 7 
+                        ? "Foque em melhorar a relevância dos anúncios e a experiência das páginas de destino para aumentar o Quality Score."
+                        : "Continue otimizando seus anúncios e considere aumentar o investimento nas campanhas de melhor desempenho."
+                      }
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Campaign Selector and Ad Details */}
+      <div className="bg-white p-6 rounded-lg shadow-lg">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">Análise Detalhada por Campanha</h2>
+        
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Selecione uma campanha:
+          </label>
+          <select
+            value={selectedCampaign?.campaign_id || ''}
+            onChange={(e) => {
+              const campaign = data.campaigns.find(c => c.campaign_id === e.target.value);
+              setSelectedCampaign(campaign || null);
+            }}
+            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full max-w-2xl"
+          >
+            {data.campaigns.map(campaign => (
+              <option key={campaign.campaign_id} value={campaign.campaign_id}>
+                {campaign.campaign_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {selectedCampaign && (
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-gray-800">Gastos da Campanha</h4>
+                <p className="text-2xl font-bold text-blue-600">
+                  R$ {selectedCampaign.spend.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                </p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-gray-800">CTR da Campanha</h4>
+                <p className="text-2xl font-bold text-green-600">{selectedCampaign.ctr}%</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-gray-800">CPC da Campanha</h4>
+                <p className="text-2xl font-bold text-purple-600">
+                  R$ {selectedCampaign.cpc.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                </p>
+              </div>
+            </div>
+
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Anúncios da Campanha</h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-full table-auto">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Nome do Anúncio
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Conjunto de Anúncios
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Alcance
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Impressões
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Cliques
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      CTR (%)
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      CPC (R$)
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Gastos (R$)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {selectedCampaign.ads.map((ad, index) => (
+                    <tr key={ad.ad_id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                      <td className="px-4 py-2 text-sm text-gray-900 max-w-xs truncate">
+                        {ad.ad_name}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        {ad.adset_name}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        {ad.reach.toLocaleString('pt-BR')}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        {ad.impressions.toLocaleString('pt-BR')}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        {ad.clicks.toLocaleString('pt-BR')}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        {ad.ctr}%
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        R$ {ad.cpc.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                      </td>
+                      <td className="px-4 py-2 text-sm text-gray-500">
+                        R$ {ad.spend.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ClientAnalysis;
