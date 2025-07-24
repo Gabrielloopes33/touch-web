@@ -7,6 +7,7 @@ import MetricsSummary from './metrics/client/MetricsSummary';
 import PerformanceChart from './metrics/client/PerformanceChart';
 import CampaignList from './metrics/client/CampaignList';
 import ClientSummary from './metrics/client/ClientSummary';
+import PrincipaisMetricas from './metrics/client/PrincipaisMetricas';
 
 interface ClientAnalysisProps {
   clientId: string;
@@ -23,6 +24,7 @@ const ClientAnalysis: React.FC<ClientAnalysisProps> = ({ clientId }) => {
       
       <div className="grid grid-cols-1 gap-6">
         <ClientInfoCard clientId={clientId} clientName={clientName} />
+        <PrincipaisMetricas clientId={clientId} />
         <ClientSummary clientId={clientId} />
         <MetricsSummary clientId={clientId} />
         <PerformanceChart clientId={clientId} />
