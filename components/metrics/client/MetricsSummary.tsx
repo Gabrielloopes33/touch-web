@@ -41,27 +41,26 @@ const MetricsSummary: React.FC<MetricsSummaryProps> = ({ clientId, startDate, en
         if (startDate) url += `&startDate=${encodeURIComponent(startDate)}`;
         if (endDate) url += `&endDate=${encodeURIComponent(endDate)}`;
         
-        // Quando a API estiver pronta, você pode descomentar este código
-        // const response = await fetch(url);
-        // if (!response.ok) throw new Error('Falha ao carregar os dados');
-        // const data = await response.json();
-        // setSummaryData(data.summary);
+        // Buscar dados reais da API
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Falha ao carregar os dados');
+        const data = await response.json();
         
-        // Dados mockados para demonstração com métricas expandidas
+        // Usar dados reais da planilha
         setSummaryData({
-          total_reach: 12543,
-          total_impressions: 45876,
-          total_clicks: 2345,
-          total_spend: 1234.56,
-          avg_ctr: 5.11,
-          avg_cpc: 0.53,
-          total_campaigns: 3,
-          roas: 2.4,
-          cpl: 12.75,
-          cvr: 3.2,
-          bounce_rate: 42.3,
-          quality_score: 7.8,
-          frequency: 2.4
+          total_reach: data.summary?.total_reach || 0,
+          total_impressions: data.summary?.total_impressions || 0,
+          total_clicks: data.summary?.total_clicks || 0,
+          total_spend: data.summary?.total_spend || 0,
+          avg_ctr: data.summary?.avg_ctr || 0,
+          avg_cpc: data.summary?.avg_cpc || 0,
+          total_campaigns: data.summary?.total_campaigns || 0,
+          roas: parseFloat(data.roas) || 0,
+          cpl: parseFloat(data.cpl) || 0,
+          cvr: parseFloat(data.conversionRate) || 0,
+          bounce_rate: parseFloat(data.bounce_rate) || 0, // Se disponível na planilha
+          quality_score: parseFloat(data.qualityScore) || 0,
+          frequency: parseFloat(data.frequency) || 0 // Se disponível na planilha
         });
         
         setLoading(false);

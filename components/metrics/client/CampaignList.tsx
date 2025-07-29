@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoInformationCircleOutline, IoChevronDown, IoChevronUp } from 'react-icons/io5';
 
 interface CampaignListProps {
@@ -33,6 +33,9 @@ const CampaignList: React.FC<CampaignListProps> = ({ clientId, startDate, endDat
   // Estado para controlar qual campanha está expandida
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
   // Descrições explicativas para cada coluna
   const columnTooltips: ColumnTooltip = {
@@ -45,53 +48,81 @@ const CampaignList: React.FC<CampaignListProps> = ({ clientId, startDate, endDat
     status: "Status atual da campanha: ativa, pausada ou encerrada."
   };
 
-  // Dados mockados para demonstração
-  const [campaigns] = useState<Campaign[]>([
-    {
-      campaign_id: '1',
-      campaign_name: 'Campanha de Verão',
-      reach: 5432,
-      impressions: 15432,
-      clicks: 876,
-      spend: 432.21,
-      ctr: 5.68,
-      cpc: 0.49,
-      roas: 2.3,
-      cvr: 4.2,
-      status: 'active',
-      start_date: '2023-12-01',
-      end_date: '2024-02-28'
-    },
-    {
-      campaign_id: '2',
-      campaign_name: 'Lançamento Produto X',
-      reach: 4321,
-      impressions: 18765,
-      clicks: 1032,
-      spend: 542.87,
-      ctr: 5.50,
-      cpc: 0.53,
-      roas: 3.1,
-      cvr: 5.7,
-      status: 'active',
-      start_date: '2024-01-15'
-    },
-    {
-      campaign_id: '3',
-      campaign_name: 'Black Friday',
-      reach: 2790,
-      impressions: 11679,
-      clicks: 437,
-      spend: 259.48,
-      ctr: 3.74,
-      cpc: 0.59,
-      roas: 4.2,
-      cvr: 6.3,
-      status: 'completed',
-      start_date: '2023-11-15',
-      end_date: '2023-11-30'
+  useEffect(() => {
+    const fetchCampaigns = async () => {
+      try {
+        setLoading(true);
+        
+        // Construir URL com parâmetros de data se fornecidos
+        let url = `/api/metrics/client?client_id=${encodeURIComponent(clientId)}`;
+        
+        if (startDate) url += `&startDate=${encodeURIComponent(startDate)}`;
+        if (endDate) url += `&endDate=${encodeURIComponent(endDate)}`;
+        
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Falha ao carregar os dados');
+        
+        const data = await response.json();
+        
+        // Transformar dados da API para o formato esperado
+        if (data.campaigns && data.campaigns.length > 0) {
+          const formattedCampaigns: Campaign[] = data.campaigns.map((campaign: any) => ({
+            campaign_id: campaign.campaign_id || 'N/A',
+            campaign_name: campaign.campaign_name || 'Campanha sem nome',
+            reach: campaign.reach || 0,
+            impressions: campaign.impressions || 0,
+            clicks: campaign.clicks || 0,
+            spend: campaign.spend || 0,
+            ctr: campaign.ctr || 0,
+            cpc: campaign.cpc || 0,
+            roas: campaign.roas || 0,
+            cvr: campaign.cvr || 0,
+            status: 'active', // Status padrão, pode ser adicionado à planilha
+            start_date: campaign.start_date || '',
+            end_date: campaign.end_date || ''
+          }));
+          
+          setCampaigns(formattedCampaigns);
+        } else {
+          setCampaigns([]);
+        }
+        
+        setLoading(false);
+      } catch (err) {
+        console.error('Erro ao buscar campanhas:', err);
+        setError('Erro ao carregar dados das campanhas');
+        setLoading(false);
+      }
+    };
+
+    if (clientId) {
+      fetchCampaigns();
     }
-  ]);
+  }, [clientId, startDate, endDate]);
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="bg-white shadow-md rounded-lg p-6 mb-6">
+        <h2 className="text-xl font-semibold mb-4">Campanhas</h2>
+        <div className="flex items-center justify-center py-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="bg-white shadow-md rounded-lg p-6 mb-6">
+        <h2 className="text-xl font-semibold mb-4">Campanhas</h2>
+        <div className="p-4 bg-red-50 text-red-700 rounded-md">
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
   
   // Função para formatar valores monetários
   const formatCurrency = (value: number) => {
