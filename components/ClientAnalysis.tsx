@@ -9,6 +9,7 @@ import CampaignList from './metrics/client/CampaignList';
 import ClientSummary from './metrics/client/ClientSummary';
 import PrincipaisMetricas from './metrics/client/PrincipaisMetricas';
 import DatePicker from './DatePicker';
+import InteractiveBackground from './ui/InteractiveBackground';
 
 interface ClientAnalysisProps {
   clientId: string;
@@ -44,10 +45,12 @@ const ClientAnalysis: React.FC<ClientAnalysisProps> = ({ clientId }) => {
   };
   
   return (
-    <div className="container mx-auto px-4 py-8">
-      <ClientHeader clientId={clientId} clientName={clientName} />
-      
-      {/* Date Picker */}
+    <>
+      <InteractiveBackground />
+      <div className="relative container mx-auto px-4 py-8">
+        <ClientHeader clientId={clientId} clientName={clientName} />
+        
+        {/* Date Picker */}
       <DatePicker
         startDate={startDate}
         endDate={endDate}
@@ -91,6 +94,7 @@ const ClientAnalysis: React.FC<ClientAnalysisProps> = ({ clientId }) => {
         />
       </div>
     </div>
+    </>
   );
 };
 

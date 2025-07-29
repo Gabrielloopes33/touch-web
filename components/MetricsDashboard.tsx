@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import AuthNavigation from './AuthNavigation';
 import LoadingSpinner from './LoadingSpinner';
 import DatePicker from './DatePicker';
+import InteractiveBackground from './ui/InteractiveBackground';
+import SplitText from './ui/SplitText';
 import {
   BarChart,
   Bar,
@@ -42,8 +44,8 @@ interface MetricsData {
 }
 
 const COLORS = [
-  '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8',
-  '#82CA9D', '#FFC658', '#FF7C7C', '#8DD1E1', '#D084D0'
+  '#8B5CF6', '#A855F7', '#9333EA', '#7C3AED', '#6D28D9',
+  '#5B21B6', '#581C87', '#4C1D95', '#C084FC', '#DDD6FE'
 ];
 
 const MetricsDashboard: React.FC = () => {
@@ -162,21 +164,25 @@ const MetricsDashboard: React.FC = () => {
   const topClients = data.slice(0, 10); // Top 10 clients
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Dashboard de Métricas Meta Ads</h1>
-        <AuthNavigation />
-      </div>
-      
-      {/* Date Picker */}
-      <DatePicker
-        startDate={startDate}
-        endDate={endDate}
-        onStartDateChange={handleStartDateChange}
-        onEndDateChange={handleEndDateChange}
-        onApplyFilter={handleApplyDateFilter}
-        onClearFilter={handleClearDateFilter}
-      />
+    <>
+      <InteractiveBackground />
+      <div className="relative p-6 min-h-screen">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">
+            <SplitText delay={100}>Dashboard de Métricas Meta Ads</SplitText>
+          </h1>
+          <AuthNavigation />
+        </div>
+        
+        {/* Date Picker */}
+        <DatePicker
+          startDate={startDate}
+          endDate={endDate}
+          onStartDateChange={handleStartDateChange}
+          onEndDateChange={handleEndDateChange}
+          onApplyFilter={handleApplyDateFilter}
+          onClearFilter={handleClearDateFilter}
+        />
       
       {/* Metric Selector */}
       <div className="mb-6">
@@ -200,12 +206,13 @@ const MetricsDashboard: React.FC = () => {
       </div>
 
       {/* Correlações Estratégicas de Métricas */}
-      <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Correlações Estratégicas de Métricas</h2>
+      <div className="bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-xl border border-purple-100 mb-8 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 animate-fade-in"
+           style={{ animationDelay: '0.1s' }}>
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-6">Correlações Estratégicas de Métricas</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* CPC × CTR */}
-          <div className="border rounded-lg p-4 bg-blue-50">
-            <h3 className="font-bold text-lg text-blue-800 mb-2">CPC × CTR</h3>
+          <div className="border border-purple-200 rounded-2xl p-4 bg-gradient-to-br from-purple-50 to-violet-50 hover:shadow-lg transition-all duration-300">
+            <h3 className="font-bold text-lg text-purple-800 mb-2">💰 CPC × CTR</h3>
             <p className="text-sm text-gray-700">
               Campanhas caras com CTR baixo merecem priorização, pois estão gastando muito para poucos cliques. 
               Campanhas com CPC baixo e CTR alto podem ser replicadas.
@@ -213,8 +220,8 @@ const MetricsDashboard: React.FC = () => {
           </div>
           
           {/* CTR × CVR */}
-          <div className="border rounded-lg p-4 bg-green-50">
-            <h3 className="font-bold text-lg text-green-800 mb-2">CTR × CVR</h3>
+          <div className="border border-violet-200 rounded-2xl p-4 bg-gradient-to-br from-violet-50 to-indigo-50 hover:shadow-lg transition-all duration-300">
+            <h3 className="font-bold text-lg text-violet-800 mb-2">📈 CTR × CVR</h3>
             <p className="text-sm text-gray-700">
               Identifica discrepâncias entre atração e conversão. CTR alto e CVR baixo pode indicar 
               problemas na página de destino; CTR baixo e CVR alto pode sugerir segmentação muito restrita.
@@ -222,8 +229,8 @@ const MetricsDashboard: React.FC = () => {
           </div>
           
           {/* CPL × CVR */}
-          <div className="border rounded-lg p-4 bg-purple-50">
-            <h3 className="font-bold text-lg text-purple-800 mb-2">CPL × CVR</h3>
+          <div className="border border-indigo-200 rounded-2xl p-4 bg-gradient-to-br from-indigo-50 to-purple-50 hover:shadow-lg transition-all duration-300">
+            <h3 className="font-bold text-lg text-indigo-800 mb-2">🎯 CPL × CVR</h3>
             <p className="text-sm text-gray-700">
               Quando o custo por lead é alto e a taxa de conversão do site é baixa, o problema pode estar 
               na qualidade do público captado ou na oferta. Um CPL baixo com CVR alto indica campanhas eficientes.
@@ -231,8 +238,8 @@ const MetricsDashboard: React.FC = () => {
           </div>
           
           {/* Frequência × CTR */}
-          <div className="border rounded-lg p-4 bg-yellow-50">
-            <h3 className="font-bold text-lg text-yellow-800 mb-2">Frequência × CTR</h3>
+          <div className="border border-amber-200 rounded-2xl p-4 bg-gradient-to-br from-amber-50 to-orange-50 hover:shadow-lg transition-all duration-300">
+            <h3 className="font-bold text-lg text-amber-800 mb-2">🔄 Frequência × CTR</h3>
             <p className="text-sm text-gray-700">
               Compara a fadiga dos anúncios. Se a frequência média sobe e o CTR cai, o público está 
               saturado; convém trocar criativos ou segmentar novos públicos.
@@ -240,8 +247,8 @@ const MetricsDashboard: React.FC = () => {
           </div>
           
           {/* ROAS × Índice de qualidade */}
-          <div className="border rounded-lg p-4 bg-red-50">
-            <h3 className="font-bold text-lg text-red-800 mb-2">ROAS × Índice de qualidade</h3>
+          <div className="border border-rose-200 rounded-2xl p-4 bg-gradient-to-br from-rose-50 to-pink-50 hover:shadow-lg transition-all duration-300">
+            <h3 className="font-bold text-lg text-rose-800 mb-2">⭐ ROAS × Índice de qualidade</h3>
             <p className="text-sm text-gray-700">
               Relaciona rentabilidade com qualidade do anúncio. Um ROAS baixo e índice de qualidade baixo 
               indica anúncios mal segmentados ou pouco relevantes; melhorar a qualidade pode reduzir CPC e aumentar retorno.
@@ -251,15 +258,16 @@ const MetricsDashboard: React.FC = () => {
       </div>
       
       {/* Seletor de Correlação e Visualização */}
-      <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
+      <div className="bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-xl border border-purple-100 mb-8 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 animate-fade-in"
+           style={{ animationDelay: '0.2s' }}>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4 sm:mb-0">Visualização das Correlações Estratégicas</h2>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-4 sm:mb-0">Visualização das Correlações Estratégicas</h2>
           
           <div className="w-full sm:w-auto">
             <select
               value={selectedCorrelation}
               onChange={(e) => setSelectedCorrelation(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-purple-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white/50 backdrop-blur-sm transition-all duration-300"
             >
               <option value="cpc_ctr">CPC × CTR</option>
               <option value="ctr_cvr">CTR × CVR</option>
@@ -692,6 +700,7 @@ const MetricsDashboard: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

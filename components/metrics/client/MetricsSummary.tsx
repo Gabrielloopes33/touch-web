@@ -86,8 +86,9 @@ const MetricsSummary: React.FC<MetricsSummaryProps> = ({ clientId, startDate, en
   }
   
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-      <h2 className="text-xl font-semibold mb-4">Resumo de Métricas</h2>
+    <div className="bg-white/80 backdrop-blur-sm shadow-xl border border-purple-100 rounded-3xl p-6 mb-6 hover:shadow-2xl transition-all duration-300 animate-fade-in"
+         style={{ animationDelay: '0.2s' }}>
+      <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-6">Resumo de Métricas</h2>
       
       <div className="mb-4">
         <h3 className="text-lg font-medium text-gray-700 mb-3">Indicadores Financeiros e de Geração de Leads</h3>

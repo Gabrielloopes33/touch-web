@@ -164,10 +164,11 @@ const CampaignList: React.FC<CampaignListProps> = ({ clientId, startDate, endDat
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 mb-6">
+    <div className="bg-white/80 backdrop-blur-sm shadow-xl border border-purple-100 rounded-3xl p-6 mb-6 hover:shadow-2xl transition-all duration-300 animate-fade-in"
+         style={{ animationDelay: '0.3s' }}>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold">Campanhas</h2>
-        <div className="text-sm text-gray-500 italic">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">Campanhas</h2>
+        <div className="text-sm text-purple-600 italic">
           Clique em uma campanha para visualizar mais detalhes
         </div>
       </div>

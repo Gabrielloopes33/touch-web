@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { IoInformationCircleOutline, IoChevronDown, IoChevronUp, IoAnalyticsOutline } from 'react-icons/io5';
+import SplitText from '../../ui/SplitText';
 
 interface ClientHeaderProps {
   clientId: string;
@@ -15,7 +16,9 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ clientId, clientName }) => 
   return (
     <div className="mb-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-2">
-        <h1 className="text-3xl font-bold">Análise do Cliente: {displayName}</h1>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent">
+          <SplitText delay={100}>{`Análise do Cliente: ${displayName}`}</SplitText>
+        </h1>
         <div className="flex space-x-4">
           <button 
             onClick={() => setShowMetricsGuide(!showMetricsGuide)}

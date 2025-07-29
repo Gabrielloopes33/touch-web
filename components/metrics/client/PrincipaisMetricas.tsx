@@ -67,8 +67,9 @@ const PrincipaisMetricas: React.FC<PrincipaisMetricasProps> = ({ clientId, start
   }, [clientId, startDate, endDate]);
 
   return (
-    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-      <h2 className="font-bold text-lg text-blue-800 mb-4">Principais Métricas Explicadas</h2>
+    <div className="bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-200 rounded-3xl p-6 mb-6 shadow-xl hover:shadow-2xl transition-all duration-300 animate-fade-in"
+         style={{ animationDelay: '0.1s' }}>
+      <h2 className="font-bold text-2xl bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-6 animate-gradient">Principais Métricas Explicadas</h2>
       
       {metrics.isLoading ? (
         <div className="flex justify-center items-center p-8">
@@ -80,12 +81,12 @@ const PrincipaisMetricas: React.FC<PrincipaisMetricasProps> = ({ clientId, start
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           {/* Card de ROAS */}
-          <div className="bg-green-50 border border-green-100 rounded-lg p-4">
-            <div className="flex items-center mb-2">
-              <span className="text-amber-600 text-xl mr-2">🔥</span>
-              <h3 className="font-bold text-lg">ROAS Global</h3>
+          <div className="bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-2xl p-6 hover:shadow-lg hover:scale-105 transition-all duration-300">
+            <div className="flex items-center mb-3">
+              <span className="text-emerald-600 text-2xl mr-3">🔥</span>
+              <h3 className="font-bold text-xl text-emerald-800">ROAS Global</h3>
             </div>
-            <div className="text-2xl font-bold text-green-700 mb-2">{metrics.roas}x</div>
+            <div className="text-3xl font-bold text-emerald-700 mb-3">{metrics.roas}x</div>
             <p className="text-sm text-gray-600">
               Retorno sobre Investimento em Anúncios. Mostra quantos reais de receita são gerados para cada real 
               investido. Um ROAS acima de 4x é considerado excelente.
@@ -93,12 +94,12 @@ const PrincipaisMetricas: React.FC<PrincipaisMetricasProps> = ({ clientId, start
           </div>
 
           {/* Card de CPL */}
-          <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-            <div className="flex items-center mb-2">
-              <span className="text-blue-600 text-xl mr-2">📊</span>
-              <h3 className="font-bold text-lg">CPL Médio</h3>
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6 hover:shadow-lg hover:scale-105 transition-all duration-300">
+            <div className="flex items-center mb-3">
+              <span className="text-blue-600 text-2xl mr-3">📊</span>
+              <h3 className="font-bold text-xl text-blue-800">CPL Médio</h3>
             </div>
-            <div className="text-2xl font-bold text-blue-700 mb-2">R$ {metrics.cpl}</div>
+            <div className="text-3xl font-bold text-blue-700 mb-3">R$ {metrics.cpl}</div>
             <p className="text-sm text-gray-600">
               Custo por Lead. Indica quanto custa para gerar cada novo lead qualificado. Quanto menor, melhor a eficiência 
               da campanha.
@@ -106,12 +107,12 @@ const PrincipaisMetricas: React.FC<PrincipaisMetricasProps> = ({ clientId, start
           </div>
 
           {/* Card de Taxa de Conversão */}
-          <div className="bg-purple-50 border border-purple-100 rounded-lg p-4">
-            <div className="flex items-center mb-2">
-              <span className="text-purple-600 text-xl mr-2">📈</span>
-              <h3 className="font-bold text-lg">Taxa de Conversão</h3>
+          <div className="bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-200 rounded-2xl p-6 hover:shadow-lg hover:scale-105 transition-all duration-300">
+            <div className="flex items-center mb-3">
+              <span className="text-purple-600 text-2xl mr-3">📈</span>
+              <h3 className="font-bold text-xl text-purple-800">Taxa de Conversão</h3>
             </div>
-            <div className="text-2xl font-bold text-purple-700 mb-2">{metrics.conversionRate}%</div>
+            <div className="text-3xl font-bold text-purple-700 mb-3">{metrics.conversionRate}%</div>
             <p className="text-sm text-gray-600">
               Percentual de cliques que se convertem em leads. Uma boa CVR indica que a landing page e oferta estão 
               alinhadas com as expectativas do anúncio.
@@ -119,12 +120,12 @@ const PrincipaisMetricas: React.FC<PrincipaisMetricasProps> = ({ clientId, start
           </div>
 
           {/* Card de Quality Score */}
-          <div className="bg-amber-50 border border-amber-100 rounded-lg p-4">
-            <div className="flex items-center mb-2">
-              <span className="text-amber-600 text-xl mr-2">⭐</span>
-              <h3 className="font-bold text-lg">Quality Score Médio</h3>
+          <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 hover:shadow-lg hover:scale-105 transition-all duration-300">
+            <div className="flex items-center mb-3">
+              <span className="text-amber-600 text-2xl mr-3">⭐</span>
+              <h3 className="font-bold text-xl text-amber-800">Quality Score Médio</h3>
             </div>
-            <div className="text-2xl font-bold text-amber-700 mb-2">{metrics.qualityScore}</div>
+            <div className="text-3xl font-bold text-amber-700 mb-3">{metrics.qualityScore}</div>
             <p className="text-sm text-gray-600">
               Índice de qualidade das campanhas (1-10). Um score alto reduz o CPC e aumenta a visibilidade. Acima de 7 é 
               considerado muito bom.
