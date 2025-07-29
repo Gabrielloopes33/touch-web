@@ -25,14 +25,6 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ clientId, clientName }) => 
             <span>Entenda as métricas</span>
             {showMetricsGuide ? <IoChevronUp className="ml-1" /> : <IoChevronDown className="ml-1" />}
           </button>
-          
-          <button 
-            onClick={() => window.open('/metrics', '_self')}
-            className="flex items-center mt-2 md:mt-0 text-indigo-600 hover:text-indigo-800 transition-colors"
-          >
-            <IoAnalyticsOutline className="mr-1" size={18} />
-            <span>Dashboard Geral</span>
-          </button>
         </div>
       </div>
       

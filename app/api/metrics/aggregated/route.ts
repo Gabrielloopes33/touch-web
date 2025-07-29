@@ -2,8 +2,13 @@ import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
 import { createClient } from '@supabase/supabase-js';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    // Extrair parâmetros de data da URL
+    const { searchParams } = new URL(request.url);
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
+
     // Removido: Verificação de autenticação - API agora é pública
 
     // 2. Authenticate with Google Sheets API
@@ -39,7 +44,7 @@ export async function GET() {
 
     // 4. Process and filter the data
     const header = rows[0];
-    const data = rows.slice(1).map(row => {
+    let data = rows.slice(1).map(row => {
       const rowData: { [key: string]: string } = {};
       header.forEach((key, index) => {
         rowData[key] = row[index] || '0';
@@ -47,7 +52,34 @@ export async function GET() {
       return rowData;
     });
 
-    // 5. Aggregate data by client and metrics
+    // 5. Filter by date range if provided
+    if (startDate || endDate) {
+      data = data.filter(row => {
+        // Assumindo que há uma coluna 'date' na planilha
+        const rowDate = row.date || row.data || row.Date || row.Data;
+        if (!rowDate) return true; // Se não há data, incluir o registro
+        
+        const recordDate = new Date(rowDate);
+        if (isNaN(recordDate.getTime())) return true; // Se data inválida, incluir o registro
+        
+        let include = true;
+        
+        if (startDate) {
+          const start = new Date(startDate);
+          include = include && recordDate >= start;
+        }
+        
+        if (endDate) {
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999); // Incluir o dia inteiro
+          include = include && recordDate <= end;
+        }
+        
+        return include;
+      });
+    }
+
+    // 6. Aggregate data by client and metrics
     const aggregatedData = data.reduce((acc: any, row: any) => {
       const clientId = row.client_id;
       
@@ -86,7 +118,7 @@ export async function GET() {
       return acc;
     }, {});
 
-    // 6. Calculate averages and convert Sets to counts
+    // 7. Calculate averages and convert Sets to counts
     const finalData = Object.values(aggregatedData).map((client: any) => {
       client.campaigns = client.campaigns_list.size;
       client.ads = client.ads_list.size;
@@ -108,7 +140,7 @@ export async function GET() {
       return client;
     });
 
-    // 7. Sort by total spend (descending)
+    // 8. Sort by total spend (descending)
     finalData.sort((a: any, b: any) => b.total_spend - a.total_spend);
 
     return NextResponse.json(finalData);

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 // Hook personalizado para buscar os dados do cliente da API
-export function useClientData(clientId: string) {
+export function useClientData(clientId: string, startDate?: string, endDate?: string) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -16,8 +16,14 @@ export function useClientData(clientId: string) {
         setLoading(true);
         setError(null);
         
+        // Construir URL com parâmetros de data se fornecidos
+        let url = `/api/metrics/client?client_id=${encodeURIComponent(clientId)}`;
+        
+        if (startDate) url += `&startDate=${encodeURIComponent(startDate)}`;
+        if (endDate) url += `&endDate=${encodeURIComponent(endDate)}`;
+        
         // Chamada à API
-        const response = await fetch(`/api/metrics/client?client_id=${encodeURIComponent(clientId)}`);
+        const response = await fetch(url);
         
         if (!response.ok) {
           throw new Error(`Falha ao buscar dados: ${response.status} ${response.statusText}`);
@@ -34,7 +40,7 @@ export function useClientData(clientId: string) {
     };
 
     fetchClientData();
-  }, [clientId]);
+  }, [clientId, startDate, endDate]);
 
   return { data, loading, error };
 }

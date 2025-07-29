@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 
 interface PrincipaisMetricasProps {
   clientId: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 interface ClientMetrics {
@@ -15,7 +17,7 @@ interface ClientMetrics {
   error: string | null;
 }
 
-const PrincipaisMetricas: React.FC<PrincipaisMetricasProps> = ({ clientId }) => {
+const PrincipaisMetricas: React.FC<PrincipaisMetricasProps> = ({ clientId, startDate, endDate }) => {
   const [metrics, setMetrics] = useState<ClientMetrics>({
     roas: '0',
     cpl: '0',
@@ -28,7 +30,13 @@ const PrincipaisMetricas: React.FC<PrincipaisMetricasProps> = ({ clientId }) => 
   useEffect(() => {
     const fetchClientMetrics = async () => {
       try {
-        const response = await fetch(`/api/metrics/client?client_id=${encodeURIComponent(clientId)}`);
+        // Construir URL com parâmetros de data se fornecidos
+        let url = `/api/metrics/client?client_id=${encodeURIComponent(clientId)}`;
+        
+        if (startDate) url += `&startDate=${encodeURIComponent(startDate)}`;
+        if (endDate) url += `&endDate=${encodeURIComponent(endDate)}`;
+        
+        const response = await fetch(url);
         
         if (!response.ok) {
           throw new Error(`Erro ao buscar dados: ${response.status}`);
@@ -56,7 +64,7 @@ const PrincipaisMetricas: React.FC<PrincipaisMetricasProps> = ({ clientId }) => 
     if (clientId) {
       fetchClientMetrics();
     }
-  }, [clientId]);
+  }, [clientId, startDate, endDate]);
 
   return (
     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">

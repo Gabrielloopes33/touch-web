@@ -5,6 +5,8 @@ import { IoInformationCircleOutline, IoChevronDown, IoChevronUp } from 'react-ic
 
 interface CampaignListProps {
   clientId: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 interface Campaign {
@@ -27,7 +29,7 @@ interface ColumnTooltip {
   [key: string]: string;
 }
 
-const CampaignList: React.FC<CampaignListProps> = ({ clientId }) => {
+const CampaignList: React.FC<CampaignListProps> = ({ clientId, startDate, endDate }) => {
   // Estado para controlar qual campanha está expandida
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showTooltip, setShowTooltip] = useState<string | null>(null);

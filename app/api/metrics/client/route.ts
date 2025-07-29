@@ -6,6 +6,8 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const clientId = searchParams.get('client_id');
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
 
     if (!clientId) {
       return NextResponse.json({ error: 'client_id parameter is required' }, { status: 400 });
@@ -46,13 +48,40 @@ export async function GET(request: Request) {
 
     // 4. Process and filter the data
     const header = rows[0];
-    const data = rows.slice(1).map(row => {
+    let data = rows.slice(1).map(row => {
       const rowData: { [key: string]: string } = {};
       header.forEach((key, index) => {
         rowData[key] = row[index] || '0';
       });
       return rowData;
     });
+
+    // 4.5. Filter by date range if provided
+    if (startDate || endDate) {
+      data = data.filter(row => {
+        // Assumindo que há uma coluna 'date' na planilha
+        const rowDate = row.date || row.data || row.Date || row.Data;
+        if (!rowDate) return true; // Se não há data, incluir o registro
+        
+        const recordDate = new Date(rowDate);
+        if (isNaN(recordDate.getTime())) return true; // Se data inválida, incluir o registro
+        
+        let include = true;
+        
+        if (startDate) {
+          const start = new Date(startDate);
+          include = include && recordDate >= start;
+        }
+        
+        if (endDate) {
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999); // Incluir o dia inteiro
+          include = include && recordDate <= end;
+        }
+        
+        return include;
+      });
+    }
 
     // 5. Filter data for the specific client
     const clientData = data.filter(row => row.client_id === clientId);

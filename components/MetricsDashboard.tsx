@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import AuthNavigation from './AuthNavigation';
 import LoadingSpinner from './LoadingSpinner';
+import DatePicker from './DatePicker';
 import {
   BarChart,
   Bar,
@@ -51,15 +52,33 @@ const MetricsDashboard: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedMetric, setSelectedMetric] = useState('total_spend');
   const [selectedCorrelation, setSelectedCorrelation] = useState('cpc_ctr');
+  
+  // Estados para o filtro de data
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [isDateFilterActive, setIsDateFilterActive] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchData = async () => {
+  const fetchData = async (start?: string, end?: string) => {
     try {
+      setLoading(true);
       setError(null);
-      const response = await fetch('/api/metrics/aggregated');
+      
+      // Construir URL com parâmetros de data se fornecidos
+      let url = '/api/metrics/aggregated';
+      const params = new URLSearchParams();
+      
+      if (start) params.append('startDate', start);
+      if (end) params.append('endDate', end);
+      
+      if (params.toString()) {
+        url += '?' + params.toString();
+      }
+      
+      const response = await fetch(url);
       
       if (response.status === 401) {
         setError('Você precisa estar logado para acessar as métricas.');
@@ -91,6 +110,27 @@ const MetricsDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Funções para o filtro de data
+  const handleApplyDateFilter = () => {
+    setIsDateFilterActive(true);
+    fetchData(startDate, endDate);
+  };
+
+  const handleClearDateFilter = () => {
+    setStartDate('');
+    setEndDate('');
+    setIsDateFilterActive(false);
+    fetchData(); // Buscar todos os dados sem filtro
+  };
+
+  const handleStartDateChange = (date: string) => {
+    setStartDate(date);
+  };
+
+  const handleEndDateChange = (date: string) => {
+    setEndDate(date);
   };
 
   if (loading) {
@@ -127,6 +167,16 @@ const MetricsDashboard: React.FC = () => {
         <h1 className="text-3xl font-bold text-gray-800">Dashboard de Métricas Meta Ads</h1>
         <AuthNavigation />
       </div>
+      
+      {/* Date Picker */}
+      <DatePicker
+        startDate={startDate}
+        endDate={endDate}
+        onStartDateChange={handleStartDateChange}
+        onEndDateChange={handleEndDateChange}
+        onApplyFilter={handleApplyDateFilter}
+        onClearFilter={handleClearDateFilter}
+      />
       
       {/* Metric Selector */}
       <div className="mb-6">
@@ -610,6 +660,8 @@ const MetricsDashboard: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     <a 
                       href={`/metrics/client?id=${encodeURIComponent(client.client_id)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {client.client_id}

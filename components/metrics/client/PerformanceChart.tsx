@@ -14,9 +14,11 @@ import {
 
 interface PerformanceChartProps {
   clientId: string;
+  startDate?: string;
+  endDate?: string;
 }
 
-const PerformanceChart: React.FC<PerformanceChartProps> = ({ clientId }) => {
+const PerformanceChart: React.FC<PerformanceChartProps> = ({ clientId, startDate, endDate }) => {
   // Dados mockados para demonstração
   const data = [
     { name: 'Jan', impressions: 4000, clicks: 240, amt: 2400 },

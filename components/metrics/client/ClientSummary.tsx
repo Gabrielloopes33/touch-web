@@ -5,10 +5,12 @@ import { useClientData, useFormatter } from './hooks';
 
 interface ClientSummaryProps {
   clientId: string;
+  startDate?: string;
+  endDate?: string;
 }
 
-const ClientSummary: React.FC<ClientSummaryProps> = ({ clientId }) => {
-  const { data, loading, error } = useClientData(clientId);
+const ClientSummary: React.FC<ClientSummaryProps> = ({ clientId, startDate, endDate }) => {
+  const { data, loading, error } = useClientData(clientId, startDate, endDate);
   const { formatNumber, formatCurrency, formatPercentage } = useFormatter();
 
   if (loading) {

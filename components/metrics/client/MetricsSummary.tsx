@@ -5,6 +5,8 @@ import MetricCard from './MetricCard';
 
 interface MetricsSummaryProps {
   clientId: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 interface SummaryData {
@@ -23,7 +25,7 @@ interface SummaryData {
   frequency?: number;
 }
 
-const MetricsSummary: React.FC<MetricsSummaryProps> = ({ clientId }) => {
+const MetricsSummary: React.FC<MetricsSummaryProps> = ({ clientId, startDate, endDate }) => {
   const [loading, setLoading] = useState(true);
   const [summaryData, setSummaryData] = useState<SummaryData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -33,8 +35,14 @@ const MetricsSummary: React.FC<MetricsSummaryProps> = ({ clientId }) => {
       try {
         setLoading(true);
         
+        // Construir URL com parâmetros de data se fornecidos
+        let url = `/api/metrics/client?client_id=${encodeURIComponent(clientId)}`;
+        
+        if (startDate) url += `&startDate=${encodeURIComponent(startDate)}`;
+        if (endDate) url += `&endDate=${encodeURIComponent(endDate)}`;
+        
         // Quando a API estiver pronta, você pode descomentar este código
-        // const response = await fetch(`/api/metrics/client?client_id=${encodeURIComponent(clientId)}`);
+        // const response = await fetch(url);
         // if (!response.ok) throw new Error('Falha ao carregar os dados');
         // const data = await response.json();
         // setSummaryData(data.summary);
@@ -64,7 +72,7 @@ const MetricsSummary: React.FC<MetricsSummaryProps> = ({ clientId }) => {
     };
     
     fetchSummary();
-  }, [clientId]);
+  }, [clientId, startDate, endDate]);
   
   if (loading) {
     return <div className="bg-white shadow-md rounded-lg p-6 mb-6 animate-pulse h-40"></div>;
