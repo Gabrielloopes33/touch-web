@@ -31,7 +31,7 @@ const testimonials = [
     role: "Diretora de Operações",
     company: "HealthCare Solutions",
     avatar: "AC",
-    content: "Adotar essa solução nos permitiu reduzir faltas em 30% e eliminar 20 horas semanais de trabalho administrativo.",
+    content: "Adotar essa solução nos permitiu reduzir faltas em 30% de agendamentos na clínica e eliminar 20 horas semanais de trabalho das atendentes.",
     rating: 5,
     highlight: "30% menos faltas"
   },
@@ -49,7 +49,7 @@ const testimonials = [
     role: "Gerente Comercial",
     company: "Digital Sales",
     avatar: "MC",
-    content: "A automação de follow-up é impressionante. Não perdemos mais nenhum lead e nossa taxa de conversão triplicou.",
+    content: "A automação de follow-up é impressionante. A taxa de perda caiu muito e nossa taxa de conversão triplicou.",
     rating: 5,
     highlight: "3x mais conversões"
   }
@@ -94,7 +94,7 @@ export default function Results() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-5xl md:text-5xl font-bold text-gray-900 mb-6">
             Resultados que
             <span className="block bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Falam por Si
@@ -130,7 +130,7 @@ export default function Results() {
         {/* Testimonials Section */}
         <div className="relative">
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">
               O que Nossos Clientes Dizem
             </h3>
             <p className="text-gray-600">
@@ -202,10 +202,16 @@ export default function Results() {
               Junte-se a mais de 5.000 empresas que já escolheram o futuro das vendas.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-full hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <button 
+                onClick={() => window.open('https://api.whatsapp.com/send?phone=5531997153646&text=Vim%20do%20site%20de%20voc%C3%AAs%20e%20queria%20conversar%20mais!%20', '_blank')}
+                className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-full hover:shadow-lg transition-all duration-300 hover:scale-105"
+              >
                 Começar Teste Grátis
               </button>
-              <button className="px-8 py-4 border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-purple-600 transition-all duration-300">
+              <button 
+                onClick={() => window.open('https://api.whatsapp.com/send?phone=5531997153646&text=Vim%20do%20site%20de%20voc%C3%AAs%20e%20queria%20conversar%20mais!%20', '_blank')}
+                className="px-8 py-4 border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-purple-600 transition-all duration-300"
+              >
                 Falar com Especialista
               </button>
             </div>

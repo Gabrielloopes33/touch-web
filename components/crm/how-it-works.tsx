@@ -107,7 +107,7 @@ export default function HowItWorks() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-7xl md:text-5xl font-bold text-gray-900 mb-6">
             Como
             <span className="block bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Funciona
@@ -119,11 +119,11 @@ export default function HowItWorks() {
         </div>
 
         {/* Steps */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
+        <div className="flex grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
           {steps.map((step, index) => (
             <div
               key={index}
-              className={`relative p-8 rounded-2xl transition-all duration-500 cursor-pointer ${
+              className={`relative p-8 rounded-2xl transition-all duration-400 cursor-pointer ${
                 activeStep === index
                   ? 'bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 shadow-xl scale-105'
                   : 'bg-gray-50 border border-gray-200 hover:shadow-lg'
@@ -182,7 +182,7 @@ export default function HowItWorks() {
 
         {/* Benefits Grid */}
         <div className="mb-16">
-          <h3 className="text-3xl font-bold text-gray-900 text-center mb-12">
+          <h3 className="text-4xl sm:text-4xl lg:text-5xl font-bold text-gray-900 text-center mb-8 sm:mb-12">
             Benefícios Comprovados
           </h3>
           
@@ -190,14 +190,12 @@ export default function HowItWorks() {
             {benefits.map((benefit, index) => (
               <div
                 key={index}
-                className={`text-center p-6 bg-gradient-to-br from-gray-50 to-purple-50 rounded-xl border border-purple-100 transform transition-all duration-700 delay-${index * 200} ${
-                  isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                }`}
+                className="text-center p-6 bg-gradient-to-br from-gray-50 to-purple-50 rounded-xl border border-purple-100 transform transition-all duration-700 opacity-100 translate-y-0"
               >
-                <div className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
                   {benefit.stat}
                 </div>
-                <div className="text-lg font-semibold text-gray-900 mb-2">
+                <div className="text-base sm:text-lg font-semibold text-gray-900 mb-2">
                   {benefit.label}
                 </div>
                 <div className="text-sm text-gray-600 mb-3">
@@ -221,10 +219,16 @@ export default function HowItWorks() {
               Implemente em minutos e veja resultados desde o primeiro dia.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-full hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <button 
+                onClick={() => window.open('https://api.whatsapp.com/send?phone=5531997153646&text=Vim%20do%20site%20de%20voc%C3%AAs%20e%20queria%20conversar%20mais!%20', '_blank')}
+                className="px-8 py-4 bg-white text-purple-600 font-semibold rounded-full hover:shadow-lg transition-all duration-300 hover:scale-105"
+              >
                 Começar Implementação
               </button>
-              <button className="px-8 py-4 border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-purple-600 transition-all duration-300">
+              <button 
+                onClick={() => window.open('https://api.whatsapp.com/send?phone=5531997153646&text=Vim%20do%20site%20de%20voc%C3%AAs%20e%20queria%20conversar%20mais!%20', '_blank')}
+                className="px-8 py-4 border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-purple-600 transition-all duration-300"
+              >
                 Falar com Especialista
               </button>
             </div>

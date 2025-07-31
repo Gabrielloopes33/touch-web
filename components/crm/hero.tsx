@@ -31,8 +31,8 @@ export default function Hero() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="space-y-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20 pb-24">
+        <div className="space-y-6 sm:space-y-8">
           {/* Badge */}
           <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2 text-sm text-white">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
@@ -40,7 +40,7 @@ export default function Hero() {
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight">
+          <h1 className="text-6xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight">
             <span className="block">Nunca Mais</span>
             <span className="block bg-gradient-to-r from-purple-400 via-pink-500 to-cyan-400 bg-clip-text text-transparent">
               Perca um Compromisso
@@ -59,7 +59,10 @@ export default function Hero() {
 
           {/* CTA Section */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-            <button className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/25 hover:scale-105">
+            <button 
+              onClick={() => window.open('https://api.whatsapp.com/send?phone=5531997153646&text=Vim%20do%20site%20de%20voc%C3%AAs%20e%20queria%20conversar%20mais!%20', '_blank')}
+              className="group relative inline-flex items-center justify-center px-6 py-4 text-base sm:text-lg font-medium text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/25 hover:scale-105 w-full sm:w-auto"
+            >
               <span className="relative z-10">Quero Agendar Minha Demonstração</span>
               <div className="absolute inset-0 bg-gradient-to-r from-purple-700 to-pink-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <svg className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,8 +71,8 @@ export default function Hero() {
             </button>
             
             <button 
-              onClick={chatwootUtils.open}
-              className="inline-flex items-center px-6 py-3 text-lg font-medium text-white border border-white/30 rounded-full hover:bg-white/10 transition-all duration-300"
+              onClick={() => window.open('https://api.whatsapp.com/send?phone=5531997153646&text=Vim%20do%20site%20de%20voc%C3%AAs%20e%20queria%20conversar%20mais!%20', '_blank')}
+              className="inline-flex items-center justify-center px-6 py-4 text-base sm:text-lg font-medium text-white border border-white/30 rounded-full hover:bg-white/10 transition-all duration-300 w-full sm:w-auto"
             >
               <svg className="mr-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />

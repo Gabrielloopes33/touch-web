@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Hero from '../../components/crm/hero';
 import Storytelling from '../../components/crm/storytelling';
 import Features from '../../components/crm/features';
+import Omnichannel from '../../components/crm/omnichannel';
 import HowItWorks from '../../components/crm/how-it-works';
 import Results from '../../components/crm/results';
 import Pricing from '../../components/crm/pricing';
@@ -22,6 +23,9 @@ export default function CrmPage() {
       {/* Features Section */}
       <Features />
       
+      {/* Omnichannel Section */}
+      <Omnichannel />
+      
       {/* How It Works Section */}
       <HowItWorks />
       
@@ -29,7 +33,7 @@ export default function CrmPage() {
       <Results />
       
       {/* Pricing Section */}
-      <Pricing />
+      {/*<Pricing />
       
       {/* FAQ Section */}
       <FAQ />

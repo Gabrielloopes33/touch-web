@@ -122,7 +122,7 @@ export default function StorytellingAndSolution() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Storytelling Section */}
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
+          <h2 className="text-5xl md:text-5xl font-bold text-white mb-8">
             A Realidade de Quem
             <span className="block bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               Gerencia Relacionamentos
@@ -168,7 +168,7 @@ export default function StorytellingAndSolution() {
         {/* Solution Section */}
         <div>
           <div className="text-center mb-16">
-            <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h3 className="text-6xl md:text-5xl font-bold text-white mb-6">
               Nossa Solução
               <span className="block bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
                 Única
@@ -221,7 +221,10 @@ export default function StorytellingAndSolution() {
             <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
               Veja como nossa solução transforma cada um desses problemas em oportunidades de crescimento.
             </p>
-            <button className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105">
+            <button 
+              onClick={() => window.open('https://api.whatsapp.com/send?phone=5531997153646&text=Vim%20do%20site%20de%20voc%C3%AAs%20e%20queria%20conversar%20mais!%20', '_blank')}
+              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 hover:scale-105"
+            >
               Ver Demonstração Completa
               <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
