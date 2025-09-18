@@ -1,69 +1,139 @@
 import { NextResponse } from 'next/server';
-import { google } from 'googleapis';
-import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import db from '../../../lib/database';
 
-// This is the heart of our backend. It fetches data from Google Sheets
-// and filters it for the currently logged-in user.
+// API principal de métricas - retorna dados brutos do PostgreSQL
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    // Removido: Verificação de autenticação - agora a API é pública
+    // Extrair parâmetros da URL
+    const { searchParams } = new URL(request.url);
+    const limit = parseInt(searchParams.get('limit') || '1000');
+    const offset = parseInt(searchParams.get('offset') || '0');
+    const clientId = searchParams.get('client_id');
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
 
-    // Removido: Verificação de autenticação - API agora é pública
-    // A API retorna todos os dados disponíveis sem filtro por usuário
-    
-    // 2. Authenticate with Google Sheets API
-    const googleClientEmail = process.env.GOOGLE_CLIENT_EMAIL;
-    const googlePrivateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
-    const googleSheetId = process.env.GOOGLE_SHEET_ID;
+    // Construir query SQL
+    let query = `
+      SELECT 
+        id,
+        client_id,
+        ad_account_id,
+        campaign_name,
+        campaign_id,
+        adset_id,
+        adset_name,
+        ad_id,
+        ad_name,
+        reach,
+        impressions,
+        clicks,
+        ctr_click,
+        spend,
+        cpc,
+        cpm,
+        date_start,
+        date_stop,
+        criado_em
+      FROM metricas_ads
+      WHERE 1=1
+    `;
 
-    if (!googleClientEmail || !googlePrivateKey || !googleSheetId) {
-      return NextResponse.json({ error: 'Google Sheets configuration missing' }, { status: 500 });
+    const params: any[] = [];
+    let paramIndex = 1;
+
+    // Adicionar filtros conforme necessário
+    if (clientId) {
+      query += ` AND client_id = $${paramIndex}`;
+      params.push(clientId);
+      paramIndex++;
     }
 
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: googleClientEmail,
-        private_key: googlePrivateKey,
-      },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-    });
-
-    const sheets = google.sheets({ version: 'v4', auth });
-
-    // 3. Fetch data from the spreadsheet
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: googleSheetId,
-      range: 'Página1!A:N', // Adjust if your sheet name is different
-    });
-
-    const rows = response.data.values;
-
-    if (!rows) {
-      return NextResponse.json({ error: 'No data found in spreadsheet' }, { status: 404 });
+    if (startDate) {
+      query += ` AND date_start >= $${paramIndex}`;
+      params.push(startDate);
+      paramIndex++;
     }
 
-    // 4. Process and filter the data
-    const header = rows[0];
-    const data = rows.slice(1).map(row => {
-      const rowData: { [key: string]: string } = {};
-      header.forEach((key, index) => {
-        rowData[key] = row[index];
-      });
-      return rowData;
-    });
+    if (endDate) {
+      query += ` AND date_stop <= $${paramIndex}`;
+      params.push(endDate);
+      paramIndex++;
+    }
 
-    // This is where we'd filter by the logged-in user.
-    // For now, we'll return all data for testing the chart.
-    // const clientData = data.filter(row => row.ad_account_id === user_ad_account_id);
-    
-    // We will return all data for now to build the chart component.
-    // Filtering will be the next step.
-    return NextResponse.json(data);
+    // Adicionar ordenação e paginação
+    query += ` ORDER BY date_start DESC, spend DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
+    params.push(limit, offset);
+
+    console.log('Executing metrics query:', query);
+    console.log('With params:', params);
+
+    // Executar query
+    const result = await db.query(query, params);
+
+    // Processar resultados
+    const data = result.rows.map((row: any) => ({
+      id: row.id,
+      client_id: row.client_id,
+      ad_account_id: row.ad_account_id,
+      campaign_name: row.campaign_name,
+      campaign_id: row.campaign_id,
+      adset_id: row.adset_id,
+      adset_name: row.adset_name,
+      ad_id: row.ad_id,
+      ad_name: row.ad_name,
+      reach: parseInt(row.reach) || 0,
+      impressions: parseInt(row.impressions) || 0,
+      clicks: parseInt(row.clicks) || 0,
+      ctr_click: parseFloat(row.ctr_click) || 0,
+      spend: parseFloat(row.spend) || 0,
+      cpc: parseFloat(row.cpc) || 0,
+      cpm: parseFloat(row.cpm) || 0,
+      date_start: row.date_start,
+      date_stop: row.date_stop,
+      criado_em: row.criado_em
+    }));
+
+    // Buscar total de registros para paginação
+    let countQuery = 'SELECT COUNT(*) as total FROM metricas_ads WHERE 1=1';
+    const countParams: any[] = [];
+    let countParamIndex = 1;
+
+    if (clientId) {
+      countQuery += ` AND client_id = $${countParamIndex}`;
+      countParams.push(clientId);
+      countParamIndex++;
+    }
+
+    if (startDate) {
+      countQuery += ` AND date_start >= $${countParamIndex}`;
+      countParams.push(startDate);
+      countParamIndex++;
+    }
+
+    if (endDate) {
+      countQuery += ` AND date_stop <= $${countParamIndex}`;
+      countParams.push(endDate);
+    }
+
+    const countResult = await db.query(countQuery, countParams);
+    const total = parseInt(countResult.rows[0].total);
+
+    return NextResponse.json({
+      data,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + limit < total
+      }
+    });
 
   } catch (error) {
-    console.error('Error fetching sheet data:', error);
-    return NextResponse.json({ error: 'Failed to fetch sheet data' }, { status: 500 });
+    console.error('Error fetching metrics data from PostgreSQL:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch metrics data', details: error instanceof Error ? error.message : 'Unknown error' }, 
+      { status: 500 }
+    );
   }
 }
