@@ -40,3 +40,6 @@ next-env.d.ts
 
 # contentlayer
 .contentlayer
+
+# vscode settings with sensitive data
+.vscode/settings.json
