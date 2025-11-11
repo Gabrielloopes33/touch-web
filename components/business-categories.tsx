@@ -6,7 +6,7 @@ export default function BusinessCategories() {
   return (
     <section>
       <h1
-        className="mb-4 border-y text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center font-bold [border-image:linear-gradient(to_right,transparent,theme(colors.slate.300/.8),transparent)1] text-gray-700 dark:text-white py-10"
+        className="mb-4 border-y text-3xl sm:text-4xl md:text-5xl lg:text-4xl text-center font-bold [border-image:linear-gradient(to_right,transparent,theme(colors.slate.300/.8),transparent)1] text-gray-700 dark:text-white py-10"
         data-aos="zoom-y-out"
          data-aos-delay={250}
             >

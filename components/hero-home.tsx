@@ -119,17 +119,6 @@ export default function HeroHome() {
               </div>
             </div>
           </div>
-          {/* Hero image */}
-          {showLoader && (
-            <div
-              className="relative flex justify-center items-center mt-12"
-              style={{ minHeight: 120 }}
-            >
-              <div className="loader"></div>
-              <div className="loader"></div>
-              <div className="loader"></div>
-            </div>
-          )}
         </div>
       </div>
     </section>
