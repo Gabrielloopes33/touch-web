@@ -1,0 +1,63 @@
+
+> simple-next@0.1.0 build
+> next build
+
+   Ôû▓ Next.js 15.3.4
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./app/api/agents/route.ts
+Error:   x Return statement is not allowed here
+    ,-[C:\Users\gmora\Desktop\developer\touch-web\app\api\agents\route.ts:13:1]
+ 10 |     .order('created_at', { ascending: false })
+ 11 |     .limit(1);
+ 12 |   if (error) {
+ 13 |     return NextResponse.json({ error: error.message }, { status: 500 });
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 14 |   }
+ 15 |   return NextResponse.json({ messages: data?.[0]?.messages || [] }, { status: 200 });
+ 15 | }
+    `----
+  x Return statement is not allowed here
+    ,-[C:\Users\gmora\Desktop\developer\touch-web\app\api\agents\route.ts:15:1]
+ 12 |   if (error) {
+ 13 |     return NextResponse.json({ error: error.message }, { status: 500 });
+ 14 |   }
+ 15 |   return NextResponse.json({ messages: data?.[0]?.messages || [] }, { status: 200 });
+    :   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 16 | }
+ 17 | return NextResponse.json({ reply: 'API de agentes ativa.' }, { status: 200 });
+ 17 | }
+    `----
+  x Return statement is not allowed here
+    ,-[C:\Users\gmora\Desktop\developer\touch-web\app\api\agents\route.ts:17:1]
+ 14 |   }
+ 15 |   return NextResponse.json({ messages: data?.[0]?.messages || [] }, { status: 200 });
+ 16 | }
+ 17 | return NextResponse.json({ reply: 'API de agentes ativa.' }, { status: 200 });
+    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 18 | }
+ 19 | 
+ 19 | /* ----------------------------------------------------------------ÔÇô POST */
+    `----
+  x Expression expected
+    ,-[C:\Users\gmora\Desktop\developer\touch-web\app\api\agents\route.ts:18:1]
+ 15 |   return NextResponse.json({ messages: data?.[0]?.messages || [] }, { status: 200 });
+ 16 | }
+ 17 | return NextResponse.json({ reply: 'API de agentes ativa.' }, { status: 200 });
+ 18 | }
+    : ^
+ 19 | 
+ 20 | /* ----------------------------------------------------------------ÔÇô POST */
+ 20 | export async function POST(req: NextRequest) {
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/api/agents/route.ts
+
+
+> Build failed because of webpack errors

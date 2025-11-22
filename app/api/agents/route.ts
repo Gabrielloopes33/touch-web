@@ -1,11 +1,10 @@
-// app/api/agents/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://example.supabase.co';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'example-key';
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 /* ----------------------------------------------------------------– GET */
 export async function GET(req: NextRequest) {
@@ -79,7 +78,7 @@ export async function POST(req: NextRequest) {
       } else if (data?.error?.message) {
         reply = `[EvoAI Error]: ${data.error.message}`;
       } else if (data?.result?.status?.message?.parts) {
-        reply = data.result.status.message.parts.map((p:any) => p.text).join('\n');
+        reply = data.result.status.message.parts.map((p: any) => p.text).join('\n');
       }
       const newMessages = [...messages, { role: "assistant", content: reply }];
       await supabase.from('conversas').insert([
@@ -143,7 +142,7 @@ export async function POST(req: NextRequest) {
         reply = `[EvoAI Error]: ${data.error.message}`;
       } else if (data?.result?.status?.message?.parts) {
         // Se vier um array de partes, junta tudo
-        reply = data.result.status.message.parts.map((p:any) => p.text).join('\n');
+        reply = data.result.status.message.parts.map((p: any) => p.text).join('\n');
       }
       const newMessages = [...messages, { role: "assistant", content: reply }];
       await supabase.from('conversas').insert([
@@ -201,7 +200,7 @@ export async function POST(req: NextRequest) {
       } else if (data?.error?.message) {
         reply = `[EvoAI Error]: ${data.error.message}`;
       } else if (data?.result?.status?.message?.parts) {
-        reply = data.result.status.message.parts.map((p:any) => p.text).join('\n');
+        reply = data.result.status.message.parts.map((p: any) => p.text).join('\n');
       }
       const newMessages = [...messages, { role: "assistant", content: reply }];
       await supabase.from('conversas').insert([
