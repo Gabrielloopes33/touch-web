@@ -55,15 +55,22 @@ export default function AtendimentoAutomaticoPage() {
             </div>
 
             {/* 1. Hero Section */}
-            <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32">
+            <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+                {/* Background AsciiHero */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none z-0">
+                    <div className="relative w-[4000px] h-[2000px]">
+                        <AsciiHero />
+                    </div>
+                </div>
+
                 <div className="container mx-auto px-4 relative z-10">
-                    <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-                        <div className="lg:w-1/2 text-center lg:text-left">
+                    <div className="flex flex-col items-center text-center">
+                        <div className="max-w-4xl mx-auto">
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6 }}
-                                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8"
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8 mx-auto"
                             >
                                 <SparklesIcon className="w-4 h-4 text-purple-400" />
                                 <span className="text-sm font-medium text-purple-200">Nova Tecnologia 2.0</span>
@@ -85,7 +92,7 @@ export default function AtendimentoAutomaticoPage() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: 0.2 }}
-                                className="text-xl text-gray-400 mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed"
+                                className="text-xl text-gray-400 mb-10 max-w-lg mx-auto leading-relaxed"
                             >
                                 Transforme seu WhatsApp e Instagram em uma máquina de vendas 24/7 com nossa Inteligência Artificial avançada.
                             </motion.p>
@@ -94,65 +101,22 @@ export default function AtendimentoAutomaticoPage() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
-                                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+                                className="flex flex-col sm:flex-row gap-4 justify-center"
                             >
                                 <Link
-                                    href="https://wa.me/5511999999999?text=Quero%20aumentar%20minhas%20vendas%20com%20IA!"
+                                    href="https://api.whatsapp.com/send?phone=5531997153646&text=Vim%20do%20site%20de%20voc%C3%AAs%20e%20queria%20conversar%20mais!%20"
                                     target="_blank"
                                     className="group relative px-8 py-4 bg-white text-black rounded-full font-bold text-lg overflow-hidden transition-all hover:scale-105"
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     <span className="relative z-10 group-hover:text-white transition-colors">Quero ver funcionando</span>
                                 </Link>
-                                <button className="px-8 py-4 rounded-full font-bold text-lg text-white border border-white/20 hover:bg-white/10 transition-all">
+                                <Link
+                                    href="#solucao"
+                                    className="px-8 py-4 rounded-full font-bold text-lg text-white border border-white/20 hover:bg-white/10 transition-all"
+                                >
                                     Como funciona?
-                                </button>
-                            </motion.div>
-                        </div>
-
-                        <div className="lg:w-1/2 relative perspective-1000">
-                            <motion.div
-                                initial={{ opacity: 0, rotateY: -10, scale: 0.9 }}
-                                animate={{ opacity: 1, rotateY: 0, scale: 1 }}
-                                transition={{ duration: 1, type: "spring" }}
-                                className="relative z-10"
-                            >
-                                <div className="relative w-full aspect-square max-w-[600px] mx-auto ">
-                                    <AsciiHero />
-
-                                    {/* Floating Cards */}
-                                    <motion.div
-                                        animate={{ y: [0, -10, 0] }}
-                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                        className="absolute -left-4 top-1/4 bg-black/40 backdrop-blur-xl border border-white/10 p-4 rounded-2xl shadow-2xl z-20"
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400">
-                                                <CurrencyDollarIcon className="w-6 h-6" />
-                                            </div>
-                                            <div>
-                                                <div className="text-xs text-gray-400">Venda Realizada</div>
-                                                <div className="font-bold text-white">R$ 297,00</div>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-
-                                    <motion.div
-                                        animate={{ y: [0, 10, 0] }}
-                                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                        className="absolute -right-4 bottom-1/4 bg-black/40 backdrop-blur-xl border border-white/10 p-4 rounded-2xl shadow-2xl z-20"
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
-                                                <ChatBubbleLeftRightIcon className="w-6 h-6" />
-                                            </div>
-                                            <div>
-                                                <div className="text-xs text-gray-400">Lead Qualificado</div>
-                                                <div className="font-bold text-white">Agendado</div>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                </div>
+                                </Link>
                             </motion.div>
                         </div>
                     </div>
@@ -204,7 +168,7 @@ export default function AtendimentoAutomaticoPage() {
             </section>
 
             {/* 3. A Solução */}
-            <section className="py-24 bg-white/5 border-y border-white/5 overflow-hidden">
+            <section id="solucao" className="py-24 bg-white/5 border-y border-white/5 overflow-hidden">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col lg:flex-row items-center gap-20">
                         <motion.div
@@ -214,10 +178,10 @@ export default function AtendimentoAutomaticoPage() {
                             variants={fadeInLeft}
                             className="lg:w-1/2"
                         >
-                            <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"></div>
+                            <div className="relative overflow-hidden">
+                                <div className="absolute inset-0  z-10"></div>
                                 <Image
-                                    src="/images/creative-ad.png"
+                                    src="/images/Lightning.png"
                                     alt="Solução de Atendimento"
                                     width={800}
                                     height={800}
@@ -454,7 +418,7 @@ export default function AtendimentoAutomaticoPage() {
                                 <li className="flex items-center gap-3 text-gray-300"><CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" /> Dashboard com métricas</li>
                                 <li className="flex items-center gap-3 text-gray-300"><CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" /> Suporte por chat (48h)</li>
                             </ul>
-                            <button className="w-full py-4 rounded-xl bg-white/10 hover:bg-white/20 font-bold transition-colors">Começar Agora</button>
+                            <Link href="https://api.whatsapp.com/send?phone=5531997153646&text=Vim%20do%20site%20de%20voc%C3%AAs%20e%20queria%20conversar%20mais!%20" target="_blank" className="w-full py-4 rounded-xl bg-white/10 hover:bg-white/20 font-bold transition-colors text-center block">Começar Agora</Link>
                         </motion.div>
 
                         {/* Growth */}
@@ -473,7 +437,7 @@ export default function AtendimentoAutomaticoPage() {
                                 <li className="flex items-center gap-3 text-white"><CheckCircleIcon className="w-5 h-5 text-green-400 flex-shrink-0" /> Relatórios Semanais</li>
                                 <li className="flex items-center gap-3 text-white"><CheckCircleIcon className="w-5 h-5 text-green-400 flex-shrink-0" /> Suporte Priority (24h)</li>
                             </ul>
-                            <button className="w-full py-4 rounded-xl bg-purple-600 hover:bg-purple-500 font-bold transition-colors shadow-lg shadow-purple-600/20">Escolher Growth</button>
+                            <Link href="https://api.whatsapp.com/send?phone=5531997153646&text=Vim%20do%20site%20de%20voc%C3%AAs%20e%20queria%20conversar%20mais!%20" target="_blank" className="w-full py-4 rounded-xl bg-purple-600 hover:bg-purple-500 font-bold transition-colors shadow-lg shadow-purple-600/20 text-center block">Escolher Growth</Link>
                         </motion.div>
 
                         {/* Enterprise */}
@@ -490,7 +454,7 @@ export default function AtendimentoAutomaticoPage() {
                                 <li className="flex items-center gap-3 text-gray-300"><CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" /> Produção Audiovisual</li>
                                 <li className="flex items-center gap-3 text-gray-300"><CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" /> Consultoria Semanal</li>
                             </ul>
-                            <button className="w-full py-4 rounded-xl bg-white/10 hover:bg-white/20 font-bold transition-colors">Falar com Consultor</button>
+                            <Link href="https://api.whatsapp.com/send?phone=5531997153646&text=Vim%20do%20site%20de%20voc%C3%AAs%20e%20queria%20conversar%20mais!%20" target="_blank" className="w-full py-4 rounded-xl bg-white/10 hover:bg-white/20 font-bold transition-colors text-center block">Falar com Consultor</Link>
                         </motion.div>
                     </motion.div>
                 </div>
@@ -510,15 +474,21 @@ export default function AtendimentoAutomaticoPage() {
                         <div className="relative z-10">
                             <h2 className="text-3xl md:text-5xl font-bold mb-8">Pronto para automatizar suas vendas?</h2>
                             <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">Não deixe dinheiro na mesa. Implemente a IA que trabalha 24 horas por dia para o seu negócio.</p>
-                            <motion.button
+                            <motion.div
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 animate={{ boxShadow: ["0 0 0 0 rgba(147, 51, 234, 0)", "0 0 0 20px rgba(147, 51, 234, 0)"] }}
                                 transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
-                                className="px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-xl shadow-purple-900/20"
+                                className="inline-block rounded-full"
                             >
-                                Quero Implementar Agora
-                            </motion.button>
+                                <Link
+                                    href="https://api.whatsapp.com/send?phone=5531997153646&text=Vim%20do%20site%20de%20voc%C3%AAs%20e%20queria%20conversar%20mais!%20"
+                                    target="_blank"
+                                    className="px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-xl shadow-purple-900/20 block"
+                                >
+                                    Quero Implementar Agora
+                                </Link>
+                            </motion.div>
                         </div>
                     </motion.div>
                 </div>
